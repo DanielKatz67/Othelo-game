@@ -20,14 +20,14 @@ public class Board
         int middleWidthIndex = (int)Math.Floor((decimal)(m_Width / 2));
         int middleHeightIndex = (int)Math.Floor((decimal)(m_Height / 2));
         
-        setCell(eColor.White, middleWidthIndex - 1, middleHeightIndex - 1);
-        setCell(eColor.White, middleWidthIndex, middleHeightIndex);
-        setCell(eColor.Black, middleWidthIndex, middleHeightIndex - 1);
-        setCell(eColor.Black, middleWidthIndex - 1, middleHeightIndex);
+        SetCell(eColor.White, middleWidthIndex - 1, middleHeightIndex - 1);
+        SetCell(eColor.White, middleWidthIndex, middleHeightIndex);
+        SetCell(eColor.Black, middleWidthIndex, middleHeightIndex - 1);
+        SetCell(eColor.Black, middleWidthIndex - 1, middleHeightIndex);
     }
 
-    public void setCell(eColor color, int x, int y)
+    public void SetCell(eColor i_Color, int i_X, int i_Y)
     {
-        
+        m_Grid[i_X, i_Y] = (char)i_Color;
     }
 }
