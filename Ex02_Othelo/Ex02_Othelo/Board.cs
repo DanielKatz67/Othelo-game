@@ -15,25 +15,52 @@ public class Board
         InitializeBoard();
     }
     
+    public int Width
+    {
+        get
+        {
+            return r_Width;
+        }
+    }
+    
+    public int Height
+    {
+        get
+        {
+            return r_Height;
+        }
+    }
+    
+    public char Cell(Coordinate i_Coordinate)
+    {
+        return m_Grid[i_Coordinate.X, i_Coordinate.Y];
+    }
+    
     private void InitializeBoard()
     {
         int middleWidthIndex = (int)Math.Floor((decimal)(r_Width / 2));
         int middleHeightIndex = (int)Math.Floor((decimal)(r_Height / 2));
         
-        setCell(eColor.White, new Coordinate(middleWidthIndex - 1, middleHeightIndex - 1));
-        setCell(eColor.White, new Coordinate(middleWidthIndex, middleHeightIndex));
-        setCell(eColor.Black, new Coordinate(middleWidthIndex, middleHeightIndex - 1));
-        setCell(eColor.Black, new Coordinate(middleWidthIndex - 1, middleHeightIndex));
+        setCellForInit(eColor.White, new Coordinate(middleWidthIndex - 1, middleHeightIndex - 1));
+        setCellForInit(eColor.White, new Coordinate(middleWidthIndex, middleHeightIndex));
+        setCellForInit(eColor.Black, new Coordinate(middleWidthIndex, middleHeightIndex - 1));
+        setCellForInit(eColor.Black, new Coordinate(middleWidthIndex - 1, middleHeightIndex));
     }
 
     public void SetCell(eColor i_Color, Coordinate i_Coordinate)
     {
-        // TODO: validate arguments
-        m_Grid[i_Coordinate.X, i_Coordinate.Y] = (char)i_Color;
+        if(BoardValidator.CellIsValid(i_Coordinate))
+        {
+            m_Grid[i_Coordinate.X, i_Coordinate.Y] = (char)i_Color;
+        }
+        else
+        {
+            //ToDo: GameUI.InValidCellMassage();
+        }
     }
     
     
-    // TODO: Identify two edges
+    
     
     
     // TODO: Convert all cells between edges
@@ -42,7 +69,7 @@ public class Board
         
     }
 
-    private void setCell(eColor i_Color, Coordinate i_Coordinate)
+    private void setCellForInit(eColor i_Color, Coordinate i_Coordinate)
     {
         m_Grid[i_Coordinate.X, i_Coordinate.Y] = (char)i_Color;
     }

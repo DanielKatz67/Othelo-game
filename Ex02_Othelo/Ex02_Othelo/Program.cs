@@ -16,6 +16,7 @@ class Program
 //     public static void Run()
 //     {
 //         board = new Board();
+//         boardValidator = new boardValidator(board);
 //         player1 = new Player();
 //         player2 = new Player();
 //         currentPlayer = player1;
