@@ -20,16 +20,16 @@ public class Board
         int middleWidthIndex = (int)Math.Floor((decimal)(m_Width / 2));
         int middleHeightIndex = (int)Math.Floor((decimal)(m_Height / 2));
         
-        setCell(eColor.White, middleWidthIndex - 1, middleHeightIndex - 1);
-        setCell(eColor.White, middleWidthIndex, middleHeightIndex);
-        setCell(eColor.Black, middleWidthIndex, middleHeightIndex - 1);
-        setCell(eColor.Black, middleWidthIndex - 1, middleHeightIndex);
+        setCell(eColor.White, new Coordinate(middleWidthIndex - 1, middleHeightIndex - 1));
+        setCell(eColor.White, new Coordinate(middleWidthIndex, middleHeightIndex));
+        setCell(eColor.Black, new Coordinate(middleWidthIndex, middleHeightIndex - 1));
+        setCell(eColor.Black, new Coordinate(middleWidthIndex - 1, middleHeightIndex));
     }
 
-    public void SetCell(eColor i_Color, int i_X, int i_Y)
+    public void SetCell(eColor i_Color, Coordinate i_Coordinate)
     {
         // TODO: validate arguments
-        m_Grid[i_X, i_Y] = (char)i_Color;
+        m_Grid[i_Coordinate.X, i_Coordinate.Y] = (char)i_Color;
     }
     
     
@@ -42,8 +42,8 @@ public class Board
         
     }
 
-    private void setCell(eColor i_Color, int i_X, int i_Y)
+    private void setCell(eColor i_Color, Coordinate i_Coordinate)
     {
-        m_Grid[i_X, i_Y] = (char)i_Color;
+        m_Grid[i_Coordinate.X, i_Coordinate.Y] = (char)i_Color;
     }
 }
