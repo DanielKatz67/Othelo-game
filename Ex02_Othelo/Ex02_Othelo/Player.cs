@@ -34,10 +34,10 @@ public class Player
         }
     }
 
-    public Player(string i_name, int i_score, string i_color)
+    public Player(string i_Name, int i_Score, string i_Color)
     {
-        m_name = i_name;
-        m_score = i_score;
-        m_color = i_color;
+        m_Name = i_Name;
+        m_Score = i_Score;
+        m_Color = i_Color;
     }
 }
