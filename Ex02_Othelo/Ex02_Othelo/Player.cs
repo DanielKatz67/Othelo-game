@@ -2,11 +2,11 @@ namespace Ex02_Othelo;
 
 public class Player
 {
-    private string m_Color;
+    private eColor m_Color;
     private string m_Name;
     private int m_Score;
 
-    public string Color
+    public eColor Color
     {
         get
         {
@@ -34,7 +34,7 @@ public class Player
         }
     }
 
-    public Player(string i_Name, int i_Score, string i_Color)
+    public Player(string i_Name, int i_Score, eColor i_Color)
     {
         m_Name = i_Name;
         m_Score = i_Score;
