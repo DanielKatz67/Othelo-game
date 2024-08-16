@@ -3,22 +3,22 @@ namespace Ex02_Othelo;
 
 public class Board
 {
-    private readonly int m_Width;
-    private readonly int m_Height;
+    private readonly int r_Width;
+    private readonly int r_Height;
     private char[,] m_Grid;
 
     public Board(int i_Width, int i_Height)
     {
-        m_Width = i_Width;
-        m_Height = i_Height;
-        m_Grid = new char[m_Width, m_Height];
+        r_Width = i_Width;
+        r_Height = i_Height;
+        m_Grid = new char[r_Width, r_Height];
         InitializeBoard();
     }
     
     private void InitializeBoard()
     {
-        int middleWidthIndex = (int)Math.Floor((decimal)(m_Width / 2));
-        int middleHeightIndex = (int)Math.Floor((decimal)(m_Height / 2));
+        int middleWidthIndex = (int)Math.Floor((decimal)(r_Width / 2));
+        int middleHeightIndex = (int)Math.Floor((decimal)(r_Height / 2));
         
         setCell(eColor.White, new Coordinate(middleWidthIndex - 1, middleHeightIndex - 1));
         setCell(eColor.White, new Coordinate(middleWidthIndex, middleHeightIndex));
