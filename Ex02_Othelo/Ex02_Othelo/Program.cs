@@ -7,7 +7,7 @@ class Program
 {
     public static void Main(String[] args)
     {
-        throw new NotImplementedException();
+        var board = new Board(8, 8);
     } 
 }
 

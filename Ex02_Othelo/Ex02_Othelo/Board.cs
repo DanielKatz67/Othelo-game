@@ -20,13 +20,29 @@ public class Board
         int middleWidthIndex = (int)Math.Floor((decimal)(m_Width / 2));
         int middleHeightIndex = (int)Math.Floor((decimal)(m_Height / 2));
         
-        SetCell(eColor.White, middleWidthIndex - 1, middleHeightIndex - 1);
-        SetCell(eColor.White, middleWidthIndex, middleHeightIndex);
-        SetCell(eColor.Black, middleWidthIndex, middleHeightIndex - 1);
-        SetCell(eColor.Black, middleWidthIndex - 1, middleHeightIndex);
+        setCell(eColor.White, middleWidthIndex - 1, middleHeightIndex - 1);
+        setCell(eColor.White, middleWidthIndex, middleHeightIndex);
+        setCell(eColor.Black, middleWidthIndex, middleHeightIndex - 1);
+        setCell(eColor.Black, middleWidthIndex - 1, middleHeightIndex);
     }
 
     public void SetCell(eColor i_Color, int i_X, int i_Y)
+    {
+        // TODO: validate arguments
+        m_Grid[i_X, i_Y] = (char)i_Color;
+    }
+    
+    
+    // TODO: Identify two edges
+    
+    
+    // TODO: Convert all cells between edges
+    private void convertCellsBetweenEdges()
+    {
+        
+    }
+
+    private void setCell(eColor i_Color, int i_X, int i_Y)
     {
         m_Grid[i_X, i_Y] = (char)i_Color;
     }
