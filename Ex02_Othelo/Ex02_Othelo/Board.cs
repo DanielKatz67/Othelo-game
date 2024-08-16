@@ -59,14 +59,9 @@ public class Board
         }
     }
     
-    
-    
-    
-    
-    // TODO: Convert all cells between edges
     private void convertCellsBetweenEdges()
     {
-        
+        // TODO: Convert all cells between edges
     }
 
     private void setCellForInit(eColor i_Color, Coordinate i_Coordinate)
