@@ -59,6 +59,7 @@ public class Board
         if(BoardValidator.CellIsValid(i_Coordinate, i_Color, edgesInSameColor, this))
         {
             m_Grid[i_Coordinate.X, i_Coordinate.Y] = (char)i_Color;
+            convertCellsBetweenEdges(i_Color, i_Coordinate, edgesInSameColor);
         }
         else
         {
@@ -66,9 +67,37 @@ public class Board
         }
     }
     
-    private void convertCellsBetweenEdges()
+    private void convertCellsBetweenEdges(eColor i_Color, Coordinate i_Coordinate, Coordinate?[] i_EdgesInSameColor)
     {
-        // TODO: Convert all cells between edges
+        int[,] directions = new int[,]
+        {
+            {-1,  0}, // Left
+            { 1,  0}, // Right
+            { 0, -1}, // Up
+            { 0,  1}, // Down
+            {-1, -1}, // Top-left diagonal
+            { 1,  1}, // Bottom-right diagonal
+            {-1,  1}, // Bottom-left diagonal
+            { 1, -1}  // Top-right diagonal
+        };
+        
+        for (int i = 0; i < i_EdgesInSameColor.Length; i++)
+        {
+            if (i_EdgesInSameColor[i].HasValue)
+            {
+                int dx = directions[i, 0];
+                int dy = directions[i, 1];
+                int x = i_Coordinate.X + dx;
+                int y = i_Coordinate.Y + dy;
+                
+                while (x != i_EdgesInSameColor[i].Value.X || y != i_EdgesInSameColor[i].Value.Y)
+                {
+                    SetCell(i_Color, new Coordinate(x, y));
+                    x += dx;
+                    y += dy;
+                }
+            }
+        }
     }
 
     public void PrintBoard()
