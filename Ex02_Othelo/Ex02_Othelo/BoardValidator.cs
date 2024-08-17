@@ -22,8 +22,8 @@ public class BoardValidator
     
     public static bool CellInGrid(Coordinate i_Coordinate, Board i_board)
     {
-        return (i_Coordinate.X < 0 || i_Coordinate.X >= i_board.Width || 
-                i_Coordinate.Y < 0 || i_Coordinate.Y >= i_board.Height);
+        return (i_Coordinate.X > 0 || i_Coordinate.X <= i_board.Width || 
+                i_Coordinate.Y > 0 || i_Coordinate.Y <= i_board.Height);
     }
     
     private static bool isValidMove(Coordinate i_Coordinate, eColor i_Color, Coordinate?[] i_edgesInSameColor)

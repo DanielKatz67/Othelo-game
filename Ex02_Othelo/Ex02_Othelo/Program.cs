@@ -1,5 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-
+﻿
 
 using Ex02_Othelo;
 
@@ -7,7 +6,14 @@ class Program
 {
     public static void Main(String[] args)
     {
-        var board = new Board(8, 8);
+        // Board board = new Board(8, 8);
+        // board.PrintBoard();
+        //
+        // board.SetCell(eColor.White, new Coordinate(5,3));
+        // board.PrintBoard();
+        //
+        // board.SetCell(eColor.Black, new Coordinate(5,2));
+        // board.PrintBoard();
     } 
 }
 

@@ -81,7 +81,7 @@ public class Board
             { 1, -1}  // Top-right diagonal
         };
         
-        for (int i = 0; i < i_EdgesInSameColor.Length; i++)
+        for (int i = 0; i < 8; i++)
         {
             if (i_EdgesInSameColor[i].HasValue)
             {
@@ -92,7 +92,7 @@ public class Board
                 
                 while (x != i_EdgesInSameColor[i].Value.X || y != i_EdgesInSameColor[i].Value.Y)
                 {
-                    SetCell(i_Color, new Coordinate(x, y));
+                    m_Grid[x, y] = (char)i_Color;
                     x += dx;
                     y += dy;
                 }
@@ -102,38 +102,56 @@ public class Board
 
     public void PrintBoard()
     {
-        Ex02.ConsoleUtils.Screen.Clear();
+        // Todo: replace in windows
+        //Ex02.ConsoleUtils.Screen.Clear();
+        // in Mac:
+        // Console.Clear();
+        printColumnHeaders();
         
+        for (int x = 0; x < r_Width; x++)
+        {
+            printSeparatorLine();
+            printRow(x);
+        }
+
+        printSeparatorLine();
+    }
+    
+    private void printColumnHeaders()
+    {
         Console.Write("  ");
+        
         for (char column = 'A'; column < 'A' + r_Width; column++)
         {
-            Console.Write(" " + column + " ");
+            Console.Write("  " + column + " ");
         }
+        
         Console.WriteLine();
+    }
+    
+    private void printSeparatorLine()
+    {
+        Console.Write("  ");
+        
+        for (int x = 0; x < r_Width; x++)
+        {
+            Console.Write("====");
+        }
+        
+        Console.WriteLine("=");
+    }
+    
+    private void printRow(int i_X)
+    {
+        Console.Write((i_X + 1) + " ");
+        char signToRight;
         
         for (int y = 0; y < r_Height; y++)
         {
-            Console.Write("  ");
-            for (int x = 0; x < r_Width; x++)
-            {
-                Console.Write("===");
-            }
-            Console.WriteLine("=");
-
-            Console.Write((y + 1) + " ");
-
-            for (int x = 0; x < r_Width; x++)
-            {
-                Console.Write("| " + m_Grid[x, y] + " ");
-            }
-            Console.WriteLine("|");
+            signToRight = m_Grid[i_X, y] == '\0' ? ' ' : m_Grid[i_X, y];
+            Console.Write("| " + signToRight + " ");
         }
-
-        Console.Write("  ");
-        for (int x = 0; x < r_Width; x++)
-        {
-            Console.Write("===");
-        }
-        Console.WriteLine("=");
+            
+        Console.WriteLine("|");
     }
 }
