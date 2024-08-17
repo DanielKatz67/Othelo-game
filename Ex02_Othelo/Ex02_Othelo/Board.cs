@@ -102,6 +102,38 @@ public class Board
 
     public void PrintBoard()
     {
+        Ex02.ConsoleUtils.Screen.Clear();
         
+        Console.Write("  ");
+        for (char column = 'A'; column < 'A' + r_Width; column++)
+        {
+            Console.Write(" " + column + " ");
+        }
+        Console.WriteLine();
+        
+        for (int y = 0; y < r_Height; y++)
+        {
+            Console.Write("  ");
+            for (int x = 0; x < r_Width; x++)
+            {
+                Console.Write("===");
+            }
+            Console.WriteLine("=");
+
+            Console.Write((y + 1) + " ");
+
+            for (int x = 0; x < r_Width; x++)
+            {
+                Console.Write("| " + m_Grid[x, y] + " ");
+            }
+            Console.WriteLine("|");
+        }
+
+        Console.Write("  ");
+        for (int x = 0; x < r_Width; x++)
+        {
+            Console.Write("===");
+        }
+        Console.WriteLine("=");
     }
 }
