@@ -15,8 +15,10 @@ class Program
 // {
 //     public static void Run()
 //     {
-//         board = new Board();
-//         boardValidator = new boardValidator(board);
+//         int width = //input
+//         int height = //input
+//         board = new Board(width, height);
+//         boardValidator = new boardValidator(width, height);
 //         player1 = new Player();
 //         player2 = new Player();
 //         currentPlayer = player1;

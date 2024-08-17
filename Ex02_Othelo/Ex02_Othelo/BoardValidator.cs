@@ -3,48 +3,32 @@ namespace Ex02_Othelo;
 
 public class BoardValidator
 {
-    private readonly Board r_Board;
-
-    public BoardValidator(Board i_Board)
+    public static bool CellIsValid(Coordinate i_Coordinate, eColor i_Color, Coordinate?[] i_edgesInSameColor, Board i_board)
     {
-        r_Board = i_Board;
-    }
-    
-    public Board Board
-    {
-        get
-        {
-            return r_Board;
-        }
-    }
-    
-    public bool CellIsValid(Coordinate i_Coordinate, eColor i_Color)
-    {
-        if (!CellInGrid())
+        if (!CellInGrid(i_Coordinate, i_board))
         {
             //ToDo: GameUI.OutOfGridMassage();
             return false;
         }
         
-        if (r_Board.Cell(i_Coordinate) != '\0')
+        if (i_board.Cell(i_Coordinate) != '\0')
         {
+            //ToDo: GameUI.NotEmptyCellMassage();
             return false;
         }
         
-        return isValidMove(i_Coordinate, i_Color);
+        return isValidMove(i_Coordinate, i_Color, i_edgesInSameColor);
     }
     
-    public bool CellInGrid(Coordinate i_Coordinate)
+    public static bool CellInGrid(Coordinate i_Coordinate, Board i_board)
     {
-        return (i_Coordinate.X < 0 || i_Coordinate.X >= r_Board.Width || 
-                i_Coordinate.Y < 0 || i_Coordinate.Y >= r_Board.Height);
+        return (i_Coordinate.X < 0 || i_Coordinate.X >= i_board.Width || 
+                i_Coordinate.Y < 0 || i_Coordinate.Y >= i_board.Height);
     }
     
-    private bool isValidMove(Coordinate i_Coordinate, eColor i_Color)
+    private static bool isValidMove(Coordinate i_Coordinate, eColor i_Color, Coordinate?[] i_edgesInSameColor)
     {
-        Coordinate?[] edges = IdentifyAllEdges(i_Coordinate, i_Color);
-        
-        foreach (Coordinate? edge in edges)
+        foreach (Coordinate? edge in i_edgesInSameColor)
         {
             if (edge.HasValue)
             {
@@ -55,7 +39,7 @@ public class BoardValidator
         return false; 
     }
     
-    public Coordinate?[] IdentifyAllEdges(Coordinate i_Coordinate, eColor i_Color)
+    public static Coordinate?[] IdentifyAllEdges(Coordinate i_Coordinate, eColor i_Color, Board i_board)
     {
         Coordinate?[] validEdgesInAllDirections = new Coordinate?[8];
         
@@ -81,9 +65,9 @@ public class BoardValidator
             int y = i_Coordinate.Y + dy;
             bool hasOpponentCoinBetween = false;
             
-            while (x >= 0 && x < Board.Width && y >= 0 && y <  Board.Height)
+            while (x >= 0 && x < i_board.Width && y >= 0 && y < i_board.Height)
             {
-                char currentCell =  Board.Cell(new Coordinate(x, y));
+                char currentCell =  i_board.Cell(new Coordinate(x, y));
 
                 if (currentCell == (char)opponentColor)
                 {

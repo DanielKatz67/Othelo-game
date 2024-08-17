@@ -12,7 +12,7 @@ public class Board
         r_Width = i_Width;
         r_Height = i_Height;
         m_Grid = new char[r_Width, r_Height];
-        InitializeBoard();
+        initializeBoard();
     }
     
     public int Width
@@ -36,7 +36,7 @@ public class Board
         return m_Grid[i_Coordinate.X, i_Coordinate.Y];
     }
     
-    private void InitializeBoard()
+    private void initializeBoard()
     {
         int middleWidthIndex = (int)Math.Floor((decimal)(r_Width / 2));
         int middleHeightIndex = (int)Math.Floor((decimal)(r_Height / 2));
@@ -47,9 +47,16 @@ public class Board
         setCellForInit(eColor.Black, new Coordinate(middleWidthIndex - 1, middleHeightIndex));
     }
 
+    private void setCellForInit(eColor i_Color, Coordinate i_Coordinate)
+    {
+        m_Grid[i_Coordinate.X, i_Coordinate.Y] = (char)i_Color;
+    }
+    
     public void SetCell(eColor i_Color, Coordinate i_Coordinate)
     {
-        if(BoardValidator.CellIsValid(i_Coordinate))
+        Coordinate?[] edgesInSameColor = BoardValidator.IdentifyAllEdges(i_Coordinate, i_Color, this);
+        
+        if(BoardValidator.CellIsValid(i_Coordinate, i_Color, edgesInSameColor, this))
         {
             m_Grid[i_Coordinate.X, i_Coordinate.Y] = (char)i_Color;
         }
@@ -64,8 +71,8 @@ public class Board
         // TODO: Convert all cells between edges
     }
 
-    private void setCellForInit(eColor i_Color, Coordinate i_Coordinate)
+    public void PrintBoard()
     {
-        m_Grid[i_Coordinate.X, i_Coordinate.Y] = (char)i_Color;
+        
     }
 }
