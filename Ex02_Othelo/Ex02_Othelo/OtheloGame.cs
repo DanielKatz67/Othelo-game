@@ -11,7 +11,6 @@ public static class OtheloGame
     public static void Run()
     {
         Console.WriteLine("Welcome to Othelo Game!");
-        
         m_Player1 = getPlayer("Enter your name: ", eColor.Black);
         m_Player2 = getPlayer("Opponent! enter your name: ", eColor.White);
         m_CurrentPlayer = m_Player1;
@@ -47,11 +46,11 @@ public static class OtheloGame
         endGame();
     }
     
-    private static bool isValidMove(string? step, out Coordinate coordinate)
+    private static bool isValidMove(string? i_Step, out Coordinate o_Coordinate)
     {
-        return isStepValid(step, out coordinate) &&
-               BoardValidator.CellIsValid(coordinate, m_CurrentPlayer.Color, 
-                   BoardValidator.IdentifyAllEdges(coordinate, m_CurrentPlayer.Color, m_Board), 
+        return isStepValid(i_Step, out o_Coordinate) &&
+               BoardValidator.CellIsValid(o_Coordinate, m_CurrentPlayer.Color, 
+                   BoardValidator.IdentifyAllEdges(o_Coordinate, m_CurrentPlayer.Color, m_Board), 
                    m_Board);
     }
     
@@ -120,7 +119,7 @@ public static class OtheloGame
         return isValid;
     }
     
-    private static Player getPlayer(string i_Message,eColor i_Color)
+    private static Player getPlayer(string i_Message, eColor i_Color)
     {
         Console.WriteLine(i_Message);
         string? playerName = Console.ReadLine();
@@ -146,8 +145,8 @@ public static class OtheloGame
         m_Board.PrintBoard();
         Console.WriteLine($"Game Over! Final Scores: {m_Player1.Name} (X): {m_Player1.Score}, {m_Player2.Name} (O): {m_Player2.Score}");
         Console.WriteLine($"{(m_Player1.Score > m_Player2.Score ? m_Player1.Name : m_Player2.Name)} wins!");
-
         Console.WriteLine("Do you want to play again? (yes/no):");
+        
         if (Console.ReadLine().Trim().ToLower() == "yes")
         {
             Run();
