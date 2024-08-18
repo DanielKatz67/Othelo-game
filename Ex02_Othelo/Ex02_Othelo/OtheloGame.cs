@@ -54,7 +54,10 @@ public static class OtheloGame
         return false;
     }
 
-
+    private static void switchPlayers()
+    {
+        m_CurrentPlayer = m_CurrentPlayer == m_Player1 ? m_Player2 : m_Player1;
+    }
 
     private static int getBoardSize()
     {
