@@ -8,12 +8,12 @@ public static class OtheloGame
     private static Board m_Board;
     private static BoardValidator m_BoardValidator;
     private static string m_PlayerHasNoMovesNotification = "";
+    private static bool m_IsQuit = false;
     
     public static void Run()
     {
         Console.WriteLine("Welcome to Othelo Game!");
         m_Player1 = getPlayer("Enter your name: ", eColor.Black);
-        // TODO: computer interaction
         m_Player2 = getPlayer("Opponent! enter your name: ", eColor.White);
         m_CurrentPlayer = m_Player1;
         
@@ -25,27 +25,49 @@ public static class OtheloGame
     
     private static void startGame()
     {
-        while (!isGameOver())
+        while (!m_IsQuit && !isGameOver())
         {
             Console.Clear();
             m_Board.PrintBoard();
             Console.WriteLine(m_PlayerHasNoMovesNotification);
-            Console.WriteLine($"{m_CurrentPlayer.Name} ({(char)m_CurrentPlayer.Color}), Enter your move (e.g A1): ");
+            Console.WriteLine($"{m_CurrentPlayer.Name} ({(char)m_CurrentPlayer.Color}), Enter your move (e.g A1) or press 'Q' to quit:");
             string? step = Console.ReadLine();
+            
+            if (step?.Trim().ToUpper() == "Q")
+            {
+                m_IsQuit = true;
+                break;
+            }
+
             Coordinate coordinate;
             
             while (!isValidMove(step, out coordinate))
             {
-                Console.WriteLine("Invalid move. Please enter a valid move (e.g., A1):");
+                Console.WriteLine("Invalid move. Please enter a valid move (e.g., A1) or press 'Q' to quit:");
                 step = Console.ReadLine();
+                
+                if (step?.Trim().ToUpper() == "Q")
+                {
+                    m_IsQuit = true;
+                    break;
+                }
             }
-            
-            m_Board.SetCell(m_CurrentPlayer.Color, coordinate);
-            
-            switchPlayers();
+
+            if (!m_IsQuit)
+            {
+                m_Board.SetCell(m_CurrentPlayer.Color, coordinate);
+                switchPlayers();
+            }
         }
         
-        endGame();
+        if (m_IsQuit)
+        {
+            Console.WriteLine("Game has been ended by the user.");
+        }
+        else
+        {
+            endGame();
+        }
     }
     
     private static bool isValidMove(string? i_Step, out Coordinate o_Coordinate)
@@ -108,7 +130,6 @@ public static class OtheloGame
         return false;
     }
 
-    
     private static void switchPlayers()
     {
         if (m_CurrentPlayer == m_Player1 && hasValidMoves(m_Player2))
