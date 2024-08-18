@@ -7,12 +7,14 @@ public static class OtheloGame
     private static Player m_Player1;
     private static Player m_Player2;
     private static Player m_CurrentPlayer;
+    private static int m_BoardSize;
     
     public static void Run()
     {
         Console.WriteLine("Welcome to Othelo Game!");
         m_Player1 = getPlayer("Enter your name: ", eColor.Black);
         m_Player2 = getPlayer("Opponent! enter your name: ", eColor.White);
+        m_BoardSize = getBoardSize();
         
     }
 
