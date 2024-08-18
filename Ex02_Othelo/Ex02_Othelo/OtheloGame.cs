@@ -7,6 +7,7 @@ public static class OtheloGame
     private static Player m_CurrentPlayer;
     private static Board m_Board;
     private static BoardValidator m_BoardValidator;
+    private static string m_PlayerHasNoMovesNotification = "";
     
     public static void Run()
     {
@@ -27,6 +28,7 @@ public static class OtheloGame
         {
             Console.Clear();
             m_Board.PrintBoard();
+            Console.WriteLine(m_PlayerHasNoMovesNotification);
             Console.WriteLine($"{m_CurrentPlayer.Name} ({(char)m_CurrentPlayer.Color}), Enter your move (e.g A1): ");
             string? step = Console.ReadLine();
             Coordinate coordinate;
@@ -118,10 +120,16 @@ public static class OtheloGame
         if (m_CurrentPlayer == m_Player1 && hasValidMoves(m_Player2))
         {
             m_CurrentPlayer = m_Player2;
+            m_PlayerHasNoMovesNotification = "";
         }
         else if (m_CurrentPlayer == m_Player2 && hasValidMoves(m_Player1))
         {
             m_CurrentPlayer = m_Player1;
+            m_PlayerHasNoMovesNotification = "";
+        }
+        else
+        {
+            m_PlayerHasNoMovesNotification = $"{(m_CurrentPlayer == m_Player1 ? m_Player2.Name : m_Player1.Name)} has no valid moves left.";
         }
     }
 
