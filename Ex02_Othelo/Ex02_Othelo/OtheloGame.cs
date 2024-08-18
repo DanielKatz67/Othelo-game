@@ -7,16 +7,54 @@ public static class OtheloGame
     private static Player m_Player1;
     private static Player m_Player2;
     private static Player m_CurrentPlayer;
-    private static int m_BoardSize;
+    private static Board m_Board;
+    private static BoardValidator m_BoardValidator;
     
     public static void Run()
     {
         Console.WriteLine("Welcome to Othelo Game!");
+        
         m_Player1 = getPlayer("Enter your name: ", eColor.Black);
         m_Player2 = getPlayer("Opponent! enter your name: ", eColor.White);
-        m_BoardSize = getBoardSize();
+        m_CurrentPlayer = m_Player1;
+        
+        int boardSize = getBoardSize();
+        m_Board = new Board(boardSize, boardSize);
         
     }
+
+    private static bool isStepValid(string? i_Step, out Coordinate o_Coordinate)
+    {
+        o_Coordinate = new Coordinate();
+
+        if (string.IsNullOrWhiteSpace(i_Step) || i_Step.Length < 2)
+        {
+            return false;
+        }
+
+        char columnChar = i_Step[0];
+        string rowPart = i_Step.Substring(1);
+
+        int column = columnChar - 'A';
+        bool isRowValid = int.TryParse(rowPart, out int row);
+
+        // Check if the column is within the valid range (e.g., A-H for 8x8 board)
+        bool isColumnValid = column >= 0 && column < m_Board.Width;
+
+        // Check if the row is within the valid range (1 to board height)
+        isRowValid = isRowValid && row >= 1 && row <= m_Board.Height;
+
+        if (isColumnValid && isRowValid)
+        {
+            // Convert row from 1-based index to 0-based index
+            o_Coordinate = new Coordinate(row - 1, column);
+            return true;
+        }
+
+        return false;
+    }
+
+
 
     private static int getBoardSize()
     {
