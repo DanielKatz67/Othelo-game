@@ -87,8 +87,8 @@ public static class OtheloGame
     
     private static bool isGameOver()
     {
-        return !HasValidMoves((char)m_Player1.Color) || 
-               !HasValidMoves((char)m_Player2.Color);
+        return !hasValidMoves((char)m_Player1.Color) || 
+               !hasValidMoves((char)m_Player2.Color);
     }
     
     private static bool hasValidMoves(char i_Player)
