@@ -54,6 +54,13 @@ public static class OtheloGame
         return false;
     }
 
+    private static bool isGameOver()
+    {
+        // return !BoardValidator.HasValidMoves(m_Board, m_Player1.Color) || 
+        //        !BoardValidator.HasValidMoves(m_Board, m_Player2.Color);
+        return false;
+    }
+    
     private static void switchPlayers()
     {
         m_CurrentPlayer = m_CurrentPlayer == m_Player1 ? m_Player2 : m_Player1;
