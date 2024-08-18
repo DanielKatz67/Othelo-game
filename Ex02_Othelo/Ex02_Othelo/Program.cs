@@ -6,14 +6,7 @@ class Program
 {
     public static void Main(String[] args)
     {
-        // Board board = new Board(8, 8);
-        // board.PrintBoard();
-        //
-        // board.SetCell(eColor.White, new Coordinate(5,3));
-        // board.PrintBoard();
-        //
-        // board.SetCell(eColor.Black, new Coordinate(5,2));
-        // board.PrintBoard();
+        OtheloGame.Run();
     } 
 }
 
