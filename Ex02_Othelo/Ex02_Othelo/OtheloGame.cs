@@ -179,6 +179,7 @@ public static class OtheloGame
     private static void endGame()
     {
         m_Board.PrintBoard();
+        m_Board.CalculateScores(m_Player1, m_Player2);
         Console.WriteLine($"Game Over! Final Scores: {m_Player1.Name} (X): {m_Player1.Score}, {m_Player2.Name} (O): {m_Player2.Score}");
         Console.WriteLine($"{(m_Player1.Score > m_Player2.Score ? m_Player1.Name : m_Player2.Name)} wins!");
         Console.WriteLine("Do you want to play again? (yes/no):");

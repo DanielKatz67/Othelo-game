@@ -154,4 +154,28 @@ public class Board
             
         Console.WriteLine("|");
     }
+    
+    public void CalculateScores(Player i_Player1, Player i_Player2)
+    {
+        int blackScore = 0;
+        int whiteScore = 0;
+
+        for (int x = 0; x < r_Width; x++)
+        {
+            for (int y = 0; y < r_Height; y++)
+            {
+                if (m_Grid[x, y] == (char)eColor.Black)
+                {
+                    blackScore++;
+                }
+                else if (m_Grid[x, y] == (char)eColor.White)
+                {
+                    whiteScore++;
+                }
+            }
+        }
+
+        i_Player1.Score = blackScore;
+        i_Player2.Score = whiteScore;
+    }
 }
