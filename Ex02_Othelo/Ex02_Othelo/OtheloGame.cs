@@ -84,13 +84,29 @@ public static class OtheloGame
 
         return false;
     }
-
+    
     private static bool isGameOver()
     {
-        // return !BoardValidator.HasValidMoves(m_Board, m_Player1.Color) || 
-        //        !BoardValidator.HasValidMoves(m_Board, m_Player2.Color);
+        return !HasValidMoves((char)m_Player1.Color) || 
+               !HasValidMoves((char)m_Player2.Color);
+    }
+    
+    private static bool hasValidMoves(char i_Player)
+    {
+        for (int i = 'A'; i < m_Board.Width; i++)
+        {
+            for (int j = 0; j < m_Board.Height; j++)
+            {
+                if (m_Board.Cell(new Coordinate(i, j)) == ' ' && isValidMove($"{i}{j}", out Coordinate coordinate))
+                {
+                    return true;
+                }
+            }
+        }
+        
         return false;
     }
+
     
     private static void switchPlayers()
     {
