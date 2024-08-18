@@ -49,9 +49,14 @@ public static class OtheloGame
     private static bool isValidMove(string? i_Step, out Coordinate o_Coordinate)
     {
         return isStepValid(i_Step, out o_Coordinate) &&
-               BoardValidator.CellIsValid(o_Coordinate, m_CurrentPlayer.Color, 
-                   BoardValidator.IdentifyAllEdges(o_Coordinate, m_CurrentPlayer.Color, m_Board), 
-                   m_Board);
+               isValidCell(o_Coordinate, m_CurrentPlayer);
+    }
+    
+    private static bool isValidCell(Coordinate i_Coordinate, Player i_Player)
+    {
+        return BoardValidator.CellIsValid(i_Coordinate, i_Player.Color, 
+            BoardValidator.IdentifyAllEdges(i_Coordinate, i_Player.Color, m_Board), 
+            m_Board);
     }
     
     private static bool isStepValid(string? i_Step, out Coordinate o_Coordinate)
@@ -87,17 +92,17 @@ public static class OtheloGame
     
     private static bool isGameOver()
     {
-        return !hasValidMoves((char)m_Player1.Color) || 
-               !hasValidMoves((char)m_Player2.Color);
+        return !hasValidMoves(m_Player1) || 
+               !hasValidMoves(m_Player2);
     }
     
-    private static bool hasValidMoves(char i_Player)
+    private static bool hasValidMoves(Player i_Player)
     {
-        for (int i = 'A'; i < m_Board.Width; i++)
+        for (int i = 0; i < m_Board.Width; i++)
         {
             for (int j = 0; j < m_Board.Height; j++)
             {
-                if (m_Board.Cell(new Coordinate(i, j)) == ' ' && isValidMove($"{i}{j}", out Coordinate coordinate))
+                if (isValidCell(new Coordinate(i, j), i_Player))
                 {
                     return true;
                 }
