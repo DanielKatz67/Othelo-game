@@ -21,8 +21,35 @@ public static class OtheloGame
         int boardSize = getBoardSize();
         m_Board = new Board(boardSize, boardSize);
         
+        startGame();
     }
+    
+    private static void startGame()
+    {
+        while (!isGameOver())
+        {
+            Console.Clear();
+            m_Board.PrintBoard();
+            Console.WriteLine($"{m_CurrentPlayer.Name} ({(char)m_CurrentPlayer.Color}), Enter your move (e.g A1): ");
+            string? step = Console.ReadLine();
+            Coordinate coordinate;
+            
+            while (!isStepValid(step, out coordinate) ||
+                   !BoardValidator.CellIsValid(coordinate, m_CurrentPlayer.Color, BoardValidator.IdentifyAllEdges(coordinate, m_CurrentPlayer.Color, m_Board), m_Board))
+            {
+                Console.WriteLine("Invalid move. Please enter a valid move (e.g., A1):");
+                step = Console.ReadLine();
+            }
+            
+            m_Board.SetCell(m_CurrentPlayer.Color, coordinate);
+            m_CurrentPlayer.Score++;
+            
+            switchPlayers();
+        }
 
+        endGame();
+    }
+    
     private static bool isStepValid(string? i_Step, out Coordinate o_Coordinate)
     {
         o_Coordinate = new Coordinate();
