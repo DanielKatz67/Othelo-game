@@ -71,19 +71,13 @@ public static class OtheloGame
 
         char columnChar = i_Step[0];
         string rowPart = i_Step.Substring(1);
-
         int column = columnChar - 'A';
         bool isRowValid = int.TryParse(rowPart, out int row);
-
-        // Check if the column is within the valid range (e.g., A-H for 8x8 board)
         bool isColumnValid = column >= 0 && column < m_Board.Width;
-
-        // Check if the row is within the valid range (1 to board height)
         isRowValid = isRowValid && row >= 1 && row <= m_Board.Height;
 
         if (isColumnValid && isRowValid)
         {
-            // Convert row from 1-based index to 0-based index
             o_Coordinate = new Coordinate(row - 1, column);
             return true;
         }
