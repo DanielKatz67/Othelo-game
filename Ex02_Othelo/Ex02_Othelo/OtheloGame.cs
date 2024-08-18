@@ -92,7 +92,7 @@ public static class OtheloGame
     
     private static bool isGameOver()
     {
-        return !hasValidMoves(m_Player1) || 
+        return !hasValidMoves(m_Player1) &&
                !hasValidMoves(m_Player2);
     }
     
@@ -115,7 +115,14 @@ public static class OtheloGame
     
     private static void switchPlayers()
     {
-        m_CurrentPlayer = m_CurrentPlayer == m_Player1 ? m_Player2 : m_Player1;
+        if (m_CurrentPlayer == m_Player1 && hasValidMoves(m_Player2))
+        {
+            m_CurrentPlayer = m_Player2;
+        }
+        else if (m_CurrentPlayer == m_Player2 && hasValidMoves(m_Player1))
+        {
+            m_CurrentPlayer = m_Player1;
+        }
     }
 
     private static int getBoardSize()
