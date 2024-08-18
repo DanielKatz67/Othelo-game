@@ -34,8 +34,7 @@ public static class OtheloGame
             string? step = Console.ReadLine();
             Coordinate coordinate;
             
-            while (!isStepValid(step, out coordinate) ||
-                   !BoardValidator.CellIsValid(coordinate, m_CurrentPlayer.Color, BoardValidator.IdentifyAllEdges(coordinate, m_CurrentPlayer.Color, m_Board), m_Board))
+            while (!isValidMove(step, out coordinate))
             {
                 Console.WriteLine("Invalid move. Please enter a valid move (e.g., A1):");
                 step = Console.ReadLine();
@@ -46,8 +45,16 @@ public static class OtheloGame
             
             switchPlayers();
         }
-
+        
         endGame();
+    }
+    
+    private static bool isValidMove(string? step, out Coordinate coordinate)
+    {
+        return isStepValid(step, out coordinate) &&
+               BoardValidator.CellIsValid(coordinate, m_CurrentPlayer.Color, 
+                   BoardValidator.IdentifyAllEdges(coordinate, m_CurrentPlayer.Color, m_Board), 
+                   m_Board);
     }
     
     private static bool isStepValid(string? i_Step, out Coordinate o_Coordinate)
