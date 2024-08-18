@@ -13,12 +13,36 @@ public static class OtheloGame
         Console.WriteLine("Welcome to Othelo Game!");
         m_Player1 = getPlayer("Enter your name: ", eColor.Black);
         m_Player2 = getPlayer("Opponent! enter your name: ", eColor.White);
+        
+    }
+
+    private static int getBoardSize()
+    {
+        Console.WriteLine("Enter board Size: ");
+        string? boardSize = Console.ReadLine();
+        int validBoardSize;
+        
+        while (!isValidBoardSize(boardSize, out validBoardSize))
+        {
+            Console.WriteLine("Invalid input, size must be a positive integer (at least 3): ");
+            boardSize = Console.ReadLine();
+        }
+
+        return validBoardSize;
+    }
+
+    private static bool isValidBoardSize(string? i_BoardSize, out int o_BoardSize)
+    {
+        bool isValid = int.TryParse(i_BoardSize, out o_BoardSize) && o_BoardSize >= 3;
+        
+        return isValid;
     }
     
     private static Player getPlayer(string i_Message,eColor i_Color)
     {
         Console.WriteLine(i_Message);
         string? playerName = Console.ReadLine();
+        
         while (!isNameValid(playerName))
         {
             Console.WriteLine("Invalid name, Please enter your name: ");
