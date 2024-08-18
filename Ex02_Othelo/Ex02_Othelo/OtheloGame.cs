@@ -13,6 +13,7 @@ public static class OtheloGame
     {
         Console.WriteLine("Welcome to Othelo Game!");
         m_Player1 = getPlayer("Enter your name: ", eColor.Black);
+        // TODO: computer interaction
         m_Player2 = getPlayer("Opponent! enter your name: ", eColor.White);
         m_CurrentPlayer = m_Player1;
         
