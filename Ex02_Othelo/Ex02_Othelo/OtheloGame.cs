@@ -108,4 +108,17 @@ public static class OtheloGame
                && i_PlayerName.Length >= 3 
                && i_PlayerName.All(char.IsLetter);
     }
+    
+    private static void endGame()
+    {
+        m_Board.PrintBoard();
+        Console.WriteLine($"Game Over! Final Scores: {m_Player1.Name} (X): {m_Player1.Score}, {m_Player2.Name} (O): {m_Player2.Score}");
+        Console.WriteLine($"{(m_Player1.Score > m_Player2.Score ? m_Player1.Name : m_Player2.Name)} wins!");
+
+        Console.WriteLine("Do you want to play again? (yes/no):");
+        if (Console.ReadLine().Trim().ToLower() == "yes")
+        {
+            Run();
+        }
+    }
 }
