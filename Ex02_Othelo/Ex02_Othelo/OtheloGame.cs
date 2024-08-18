@@ -1,5 +1,3 @@
-using System.Runtime.CompilerServices;
-
 namespace Ex02_Othelo;
 
 public static class OtheloGame
