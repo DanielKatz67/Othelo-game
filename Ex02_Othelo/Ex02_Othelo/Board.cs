@@ -52,7 +52,7 @@ public class Board
         m_Grid[i_Coordinate.X, i_Coordinate.Y] = (char)i_Color;
     }
     
-    public void SetCell(eColor i_Color, Coordinate i_Coordinate)
+    public bool TrySetCell(eColor i_Color, Coordinate i_Coordinate)
     {
         Coordinate?[] edgesInSameColor = BoardValidator.IdentifyAllEdges(i_Coordinate, i_Color, this);
         
@@ -60,11 +60,10 @@ public class Board
         {
             m_Grid[i_Coordinate.X, i_Coordinate.Y] = (char)i_Color;
             convertCellsBetweenEdges(i_Color, i_Coordinate, edgesInSameColor);
+            return true;
         }
-        else
-        {
-            //ToDo: GameUI.InValidCellMassage();
-        }
+
+        return false;
     }
     
     private void convertCellsBetweenEdges(eColor i_Color, Coordinate i_Coordinate, Coordinate?[] i_EdgesInSameColor)

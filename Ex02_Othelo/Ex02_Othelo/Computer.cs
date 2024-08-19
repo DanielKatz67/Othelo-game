@@ -14,7 +14,7 @@ public class Computer : Player
         {
             Random random = new Random();
             Coordinate selectedMove = validMoves[random.Next(validMoves.Count)];
-            i_Board.SetCell(Color, selectedMove);
+            i_Board.TrySetCell(Color, selectedMove);
         }
     }
 

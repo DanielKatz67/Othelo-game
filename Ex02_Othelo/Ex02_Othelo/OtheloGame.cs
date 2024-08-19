@@ -51,6 +51,7 @@ public static class OtheloGame
             if (m_IsPlayingAgainstComputer && m_CurrentPlayer == m_Computer)
             {
                 m_Computer.MoveRandomly(m_Board);
+                switchPlayers();
                 continue;
             }
 
@@ -70,7 +71,7 @@ public static class OtheloGame
                 break;
             }
 
-            m_Board.SetCell(m_CurrentPlayer.Color, coordinate);
+            m_Board.TrySetCell(m_CurrentPlayer.Color, coordinate);
             switchPlayers();
         }
         

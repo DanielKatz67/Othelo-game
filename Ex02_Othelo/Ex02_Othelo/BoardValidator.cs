@@ -7,13 +7,11 @@ public class BoardValidator
     {
         if (!CellInGrid(i_Coordinate, i_board))
         {
-            //ToDo: GameUI.OutOfGridMassage();
             return false;
         }
         
         if (i_board.Cell(i_Coordinate) != '\0')
         {
-            //ToDo: GameUI.NotEmptyCellMassage();
             return false;
         }
         
