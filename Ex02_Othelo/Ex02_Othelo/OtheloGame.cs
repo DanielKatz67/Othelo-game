@@ -16,17 +16,16 @@ public static class OtheloGame
     {
         Console.WriteLine("Welcome to Othelo Game!");
         m_Player1 = getPlayer("Enter your name: ", eColor.Black);
+        m_CurrentPlayer = m_Player1;
 
         if (askIfPlayAgainstComputer())
         {
             m_IsPlayingAgainstComputer = true;
             m_Computer = new Computer("Computer", 0, eColor.White);
-            m_CurrentPlayer = m_Player1;
         }
         else
         {
             m_Player2 = getPlayer("Opponent! enter your name: ", eColor.White);
-            m_CurrentPlayer = m_Player1;
         }
 
         int boardSize = getBoardSize();
@@ -75,7 +74,8 @@ public static class OtheloGame
             m_Board.SetCell(m_CurrentPlayer.Color, coordinate);
             switchPlayers();
         }
-
+        
+        Console.Clear();
         handleGameEnd();
     }
 
