@@ -56,7 +56,7 @@ public class Board
     {
         Coordinate?[] edgesInSameColor = BoardValidator.IdentifyAllEdges(i_Coordinate, i_Color, this);
         
-        if(BoardValidator.CellIsValid(i_Coordinate, i_Color, edgesInSameColor, this))
+        if (BoardValidator.CellIsValid(i_Coordinate, i_Color, edgesInSameColor, this))
         {
             m_Grid[i_Coordinate.X, i_Coordinate.Y] = (char)i_Color;
             convertCellsBetweenEdges(i_Color, i_Coordinate, edgesInSameColor);
