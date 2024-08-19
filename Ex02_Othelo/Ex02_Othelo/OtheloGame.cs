@@ -9,14 +9,9 @@ public class OtheloGame
     private Board m_Board;
     private BoardValidator m_BoardValidator;
     private string m_PlayerHasNoMovesNotification = "";
-    private bool m_IsQuit = false;
-    private bool m_IsPlayingAgainstComputer = false;
+    private bool m_IsQuit;
+    private bool m_IsPlayingAgainstComputer;
 
-    public OtheloGame()
-    {
-        
-    }
-    
     public void Run()
     {
         Console.WriteLine("Welcome to Othelo Game!");
@@ -68,9 +63,7 @@ public class OtheloGame
                 break;
             }
 
-            Coordinate coordinate;
-
-            if (!handleMoveInput(step, out coordinate))
+            if (!handleMoveInput(step, out Coordinate coordinate))
             {
                 m_IsQuit = true;
                 break;
