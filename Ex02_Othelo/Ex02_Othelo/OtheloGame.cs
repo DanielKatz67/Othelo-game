@@ -112,13 +112,13 @@ public class OtheloGame
         {
             m_Board.CalculateScores(m_Player1, m_Computer);
             Console.WriteLine($"Game Over! Final Scores: {m_Player1.Name} (X): {m_Player1.Score}, Computer (O): {m_Computer.Score}");
-            Console.WriteLine($"{(m_Player1.Score > m_Computer.Score ? m_Player1.Name : "Computer")} wins!");
+            printResults(m_Player1, m_Computer);
         }
         else
         {
             m_Board.CalculateScores(m_Player1, m_Player2);
             Console.WriteLine($"Game Over! Final Scores: {m_Player1.Name} (X): {m_Player1.Score}, {m_Player2.Name} (O): {m_Player2.Score}");
-            Console.WriteLine($"{(m_Player1.Score > m_Player2.Score ? m_Player1.Name : m_Player2.Name)} wins!");
+            printResults(m_Player1, m_Player2);
         }
 
         Console.WriteLine("Do you want to quit? (Q/any other key to new game):");
@@ -132,6 +132,18 @@ public class OtheloGame
             m_IsPlayingAgainstComputer = false;
             Console.Clear();
             Run();
+        }
+    }
+
+    private void printResults(Player i_Player1, Player i_Player2)
+    {
+        if (i_Player1.Score == i_Player2.Score)
+        {
+            Console.WriteLine("You both are WINNERS");
+        }
+        else
+        {
+            Console.WriteLine($"{(i_Player1.Score > i_Player2.Score ? i_Player1.Name : i_Player2.Name)} wins!");
         }
     }
 
