@@ -59,19 +59,19 @@ public static class OtheloGame
         Console.WriteLine($"{m_CurrentPlayer.Name} ({(char)m_CurrentPlayer.Color}), Enter your move (e.g A1) or press 'Q' to quit:");
     }
 
-    private static bool isQuitCommand(string? step)
+    private static bool isQuitCommand(string? i_Step)
     {
-        return step?.Trim().ToUpper() == "Q";
+        return i_Step?.Trim().ToUpper() == "Q";
     }
 
-    private static bool handleMoveInput(string? step, out Coordinate coordinate)
+    private static bool handleMoveInput(string? i_Step, out Coordinate o_Coordinate)
     {
-        while (!isValidMove(step, out coordinate))
+        while (!isValidMove(i_Step, out o_Coordinate))
         {
             Console.WriteLine("Invalid move. Please enter a valid move (e.g., A1) or press 'Q' to quit:");
-            step = Console.ReadLine();
+            i_Step = Console.ReadLine();
 
-            if (isQuitCommand(step))
+            if (isQuitCommand(i_Step))
             {
                 return false;
             }
