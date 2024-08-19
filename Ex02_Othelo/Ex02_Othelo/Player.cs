@@ -2,15 +2,15 @@ namespace Ex02_Othelo;
 
 public class Player
 {
-    private eColor m_Color;
-    private string m_Name;
+    private readonly eColor r_Color;
+    private readonly string r_Name;
     private int m_Score;
 
     public eColor Color
     {
         get
         {
-            return m_Color;
+            return r_Color;
         }
     }
     
@@ -18,7 +18,7 @@ public class Player
     {
         get
         {
-            return m_Name;
+            return r_Name;
         }
     }
     
@@ -36,8 +36,8 @@ public class Player
 
     public Player(string i_Name, int i_Score, eColor i_Color)
     {
-        m_Name = i_Name;
+        r_Name = i_Name;
         m_Score = i_Score;
-        m_Color = i_Color;
+        r_Color = i_Color;
     }
 }
