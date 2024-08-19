@@ -1,10 +1,11 @@
 namespace Ex02_Othelo;
 
-public class Computer
+public class Computer : Player
 {
+    private string m_Name;
     private eColor m_Color;
     private int m_Score;
-
+    
     public eColor Color
     {
         get
@@ -25,10 +26,11 @@ public class Computer
         }
     }
 
-    public Computer(string i_Name, int i_Score, eColor i_Color)
+    public Computer(string i_Name, int i_Score, eColor i_Color) : base(i_Name, i_Score, i_Color)
     {
         m_Score = i_Score;
         m_Color = i_Color;
+        m_Name = i_Name;
     }
 
     public void MoveRandomly(Board i_Board)
