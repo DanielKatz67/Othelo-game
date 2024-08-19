@@ -4,50 +4,149 @@ public static class OtheloGame
 {
     private static Player m_Player1;
     private static Player m_Player2;
+    private static Computer m_Computer;
     private static Player m_CurrentPlayer;
     private static Board m_Board;
     private static BoardValidator m_BoardValidator;
     private static string m_PlayerHasNoMovesNotification = "";
+    private static bool m_IsQuit = false;
+    private static bool m_IsPlayingAgainstComputer = false;
     
     public static void Run()
     {
         Console.WriteLine("Welcome to Othelo Game!");
         m_Player1 = getPlayer("Enter your name: ", eColor.Black);
-        // TODO: computer interaction
-        m_Player2 = getPlayer("Opponent! enter your name: ", eColor.White);
         m_CurrentPlayer = m_Player1;
-        
+
+        if (askIfPlayAgainstComputer())
+        {
+            m_IsPlayingAgainstComputer = true;
+            m_Computer = new Computer("Computer", 0, eColor.White);
+        }
+        else
+        {
+            m_Player2 = getPlayer("Opponent! enter your name: ", eColor.White);
+        }
+
         int boardSize = getBoardSize();
         m_Board = new Board(boardSize, boardSize);
         
         startGame();
     }
-    
+
+    private static bool askIfPlayAgainstComputer()
+    {
+        Console.WriteLine("Do you want to play against the computer? (yes/any other key for human opponent):");
+        string? input = Console.ReadLine().Trim().ToLower();
+
+        return input == "yes";
+    }
+
     private static void startGame()
     {
-        while (!isGameOver())
+        while (!m_IsQuit && !isGameOver())
         {
-            Console.Clear();
-            m_Board.PrintBoard();
-            Console.WriteLine(m_PlayerHasNoMovesNotification);
-            Console.WriteLine($"{m_CurrentPlayer.Name} ({(char)m_CurrentPlayer.Color}), Enter your move (e.g A1): ");
-            string? step = Console.ReadLine();
-            Coordinate coordinate;
-            
-            while (!isValidMove(step, out coordinate))
+            displayBoardAndPrompt();
+
+            if (m_IsPlayingAgainstComputer && m_CurrentPlayer == m_Computer)
             {
-                Console.WriteLine("Invalid move. Please enter a valid move (e.g., A1):");
-                step = Console.ReadLine();
+                m_Computer.MoveRandomly(m_Board);
+                Console.Clear();
+                continue;
             }
-            
+
+            string? step = Console.ReadLine();
+
+            if (isQuitCommand(step))
+            {
+                m_IsQuit = true;
+                break;
+            }
+
+            Coordinate coordinate;
+
+            if (!handleMoveInput(step, out coordinate))
+            {
+                m_IsQuit = true;
+                break;
+            }
+
             m_Board.SetCell(m_CurrentPlayer.Color, coordinate);
-            
             switchPlayers();
         }
         
-        endGame();
+        Console.Clear();
+        handleGameEnd();
     }
-    
+
+    private static void displayBoardAndPrompt()
+    {
+        Console.Clear();
+        m_Board.PrintBoard();
+        Console.WriteLine(m_PlayerHasNoMovesNotification);
+        Console.WriteLine($"{m_CurrentPlayer.Name} ({(char)m_CurrentPlayer.Color}), Enter your move (e.g A1) or press 'Q' to quit:");
+    }
+
+    private static bool isQuitCommand(string? i_Step)
+    {
+        return i_Step?.Trim().ToUpper() == "Q";
+    }
+
+    private static bool handleMoveInput(string? i_Step, out Coordinate o_Coordinate)
+    {
+        while (!isValidMove(i_Step, out o_Coordinate))
+        {
+            Console.WriteLine("Invalid move. Please enter a valid move (e.g., A1) or press 'Q' to quit:");
+            i_Step = Console.ReadLine();
+
+            if (isQuitCommand(i_Step))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private static void handleGameEnd()
+    {
+        m_Board.PrintBoard();
+
+        if (m_IsPlayingAgainstComputer)
+        {
+            m_Board.CalculateScores(m_Player1, m_Computer);
+            Console.WriteLine($"Game Over! Final Scores: {m_Player1.Name} (X): {m_Player1.Score}, Computer (O): {m_Computer.Score}");
+            Console.WriteLine($"{(m_Player1.Score > m_Computer.Score ? m_Player1.Name : "Computer")} wins!");
+        }
+        else
+        {
+            m_Board.CalculateScores(m_Player1, m_Player2);
+            Console.WriteLine($"Game Over! Final Scores: {m_Player1.Name} (X): {m_Player1.Score}, {m_Player2.Name} (O): {m_Player2.Score}");
+            Console.WriteLine($"{(m_Player1.Score > m_Player2.Score ? m_Player1.Name : m_Player2.Name)} wins!");
+        }
+
+        Console.WriteLine("Do you want to play again? (yes/any other key to quit):");
+        
+        if (Console.ReadLine().Trim().ToLower() == "yes")
+        {
+            m_IsPlayingAgainstComputer = false;
+            Console.Clear();
+            Run();
+        }
+        else
+        {
+            printGoodbye();
+        }
+    }
+
+    private static void printGoodbye()
+    {
+        Console.Clear();
+        Console.WriteLine("Thanks for playing!");
+        Console.WriteLine("We'll be here when you're ready for another round.");
+        Console.WriteLine("Take care!");
+    }
+
     private static bool isValidMove(string? i_Step, out Coordinate o_Coordinate)
     {
         return isStepValid(i_Step, out o_Coordinate) &&
@@ -89,7 +188,7 @@ public static class OtheloGame
     private static bool isGameOver()
     {
         return !hasValidMoves(m_Player1) &&
-               !hasValidMoves(m_Player2);
+               !hasValidMoves(m_IsPlayingAgainstComputer ? m_Computer : m_Player2);
     }
     
     private static bool hasValidMoves(Player i_Player)
@@ -108,22 +207,21 @@ public static class OtheloGame
         return false;
     }
 
-    
     private static void switchPlayers()
     {
-        if (m_CurrentPlayer == m_Player1 && hasValidMoves(m_Player2))
+        if (m_CurrentPlayer == m_Player1 && hasValidMoves(m_IsPlayingAgainstComputer ? m_Computer : m_Player2))
         {
-            m_CurrentPlayer = m_Player2;
+            m_CurrentPlayer = m_IsPlayingAgainstComputer ? (Player)m_Computer : m_Player2;
             m_PlayerHasNoMovesNotification = "";
         }
-        else if (m_CurrentPlayer == m_Player2 && hasValidMoves(m_Player1))
+        else if (m_CurrentPlayer != m_Player1 && hasValidMoves(m_Player1))
         {
             m_CurrentPlayer = m_Player1;
             m_PlayerHasNoMovesNotification = "";
         }
         else
         {
-            m_PlayerHasNoMovesNotification = $"{(m_CurrentPlayer == m_Player1 ? m_Player2.Name : m_Player1.Name)} has no valid moves left.";
+            m_PlayerHasNoMovesNotification = $"{(m_CurrentPlayer == m_Player1 ? m_Player2?.Name ?? "Computer" : m_Player1.Name)} has no valid moves left.";
         }
     }
 
@@ -168,20 +266,5 @@ public static class OtheloGame
         return !string.IsNullOrWhiteSpace(i_PlayerName) 
                && i_PlayerName.Length >= 3 
                && i_PlayerName.All(char.IsLetter);
-    }
-    
-    private static void endGame()
-    {
-        m_Board.PrintBoard();
-        m_Board.CalculateScores(m_Player1, m_Player2);
-        
-        Console.WriteLine($"Game Over! Final Scores: {m_Player1.Name} (X): {m_Player1.Score}, {m_Player2.Name} (O): {m_Player2.Score}");
-        Console.WriteLine($"{(m_Player1.Score > m_Player2.Score ? m_Player1.Name : m_Player2.Name)} wins!");
-        Console.WriteLine("Do you want to play again? (yes/no):");
-        
-        if (Console.ReadLine().Trim().ToLower() == "yes")
-        {
-            Run();
-        }
     }
 }
