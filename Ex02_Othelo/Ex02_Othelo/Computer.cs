@@ -27,6 +27,7 @@ public class Computer : Player
             for (int y = 0; y < i_Board.Height; y++)
             {
                 Coordinate potentialMove = new Coordinate(x, y);
+                
                 if (BoardValidator.CellIsValid(potentialMove, Color, BoardValidator.IdentifyAllEdges(potentialMove, Color, i_Board), i_Board))
                 {
                     validMoves.Add(potentialMove);
