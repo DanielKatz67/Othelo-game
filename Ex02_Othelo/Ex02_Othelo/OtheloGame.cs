@@ -122,17 +122,17 @@ public static class OtheloGame
             Console.WriteLine($"{(m_Player1.Score > m_Player2.Score ? m_Player1.Name : m_Player2.Name)} wins!");
         }
 
-        Console.WriteLine("Do you want to play again? (yes/any other key to quit):");
+        Console.WriteLine("Do you want to quit? (Q/any other key to new game):");
         
-        if (Console.ReadLine().Trim().ToLower() == "yes")
+        if (Console.ReadLine().Trim().ToLower() == "q")
+        {
+            printGoodbye();
+        }
+        else
         {
             m_IsPlayingAgainstComputer = false;
             Console.Clear();
             Run();
-        }
-        else
-        {
-            printGoodbye();
         }
     }
 
