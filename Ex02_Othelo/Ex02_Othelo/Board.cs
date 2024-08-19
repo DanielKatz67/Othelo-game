@@ -105,7 +105,7 @@ public class Board
         // Todo: replace in windows
         //Ex02.ConsoleUtils.Screen.Clear();
         // in Mac:
-        // Console.Clear();
+        Console.Clear();
         printColumnHeaders();
         
         for (int x = 0; x < r_Width; x++)

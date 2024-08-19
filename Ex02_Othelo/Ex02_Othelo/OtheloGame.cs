@@ -51,7 +51,6 @@ public static class OtheloGame
             if (m_IsPlayingAgainstComputer && m_CurrentPlayer == m_Computer)
             {
                 m_Computer.MoveRandomly(m_Board);
-                Console.Clear();
                 continue;
             }
 
@@ -75,13 +74,11 @@ public static class OtheloGame
             switchPlayers();
         }
         
-        Console.Clear();
         handleGameEnd();
     }
 
     private static void displayBoardAndPrompt()
     {
-        Console.Clear();
         m_Board.PrintBoard();
         Console.WriteLine(m_PlayerHasNoMovesNotification);
         Console.WriteLine($"{m_CurrentPlayer.Name} ({(char)m_CurrentPlayer.Color}), Enter your move (e.g A1) or press 'Q' to quit:");
