@@ -14,7 +14,7 @@ public class Computer : Player
         {
             Random random = new Random();
             Coordinate selectedMove = validMoves[random.Next(validMoves.Count)];
-            i_Board.SetCell(Color, selectedMove);
+            i_Board.TrySetCell(Color, selectedMove);
         }
     }
 
@@ -27,6 +27,7 @@ public class Computer : Player
             for (int y = 0; y < i_Board.Height; y++)
             {
                 Coordinate potentialMove = new Coordinate(x, y);
+                
                 if (BoardValidator.CellIsValid(potentialMove, Color, BoardValidator.IdentifyAllEdges(potentialMove, Color, i_Board), i_Board))
                 {
                     validMoves.Add(potentialMove);

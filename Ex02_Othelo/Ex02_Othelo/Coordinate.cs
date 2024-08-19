@@ -2,20 +2,20 @@ namespace Ex02_Othelo;
 
 public struct Coordinate
 {
-    private int m_x;
-    private int m_y;
+    private readonly int r_X;
+    private readonly int r_Y;
     
     public Coordinate(int i_X, int i_Y)
     {
-        m_x = i_X;
-        m_y = i_Y;
+        r_X = i_X;
+        r_Y = i_Y;
     }
     
     public int X
     {
         get
         {
-            return m_x;
+            return r_X;
         }
     }
     
@@ -23,7 +23,7 @@ public struct Coordinate
     {
         get
         {
-            return m_y;
+            return r_Y;
         }
     }
 }

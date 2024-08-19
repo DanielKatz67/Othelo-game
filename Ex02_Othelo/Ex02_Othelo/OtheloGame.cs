@@ -1,18 +1,18 @@
 namespace Ex02_Othelo;
 
-public static class OtheloGame
+public class OtheloGame
 {
-    private static Player m_Player1;
-    private static Player m_Player2;
-    private static Computer m_Computer;
-    private static Player m_CurrentPlayer;
-    private static Board m_Board;
-    private static BoardValidator m_BoardValidator;
-    private static string m_PlayerHasNoMovesNotification = "";
-    private static bool m_IsQuit = false;
-    private static bool m_IsPlayingAgainstComputer = false;
-    
-    public static void Run()
+    private Player m_Player1;
+    private Player m_Player2;
+    private Computer m_Computer;
+    private Player m_CurrentPlayer;
+    private Board m_Board;
+    private BoardValidator m_BoardValidator;
+    private string m_PlayerHasNoMovesNotification = "";
+    private bool m_IsQuit;
+    private bool m_IsPlayingAgainstComputer;
+
+    public void Run()
     {
         Console.WriteLine("Welcome to Othelo Game!");
         m_Player1 = getPlayer("Enter your name: ", eColor.Black);
@@ -34,7 +34,7 @@ public static class OtheloGame
         startGame();
     }
 
-    private static bool askIfPlayAgainstComputer()
+    private bool askIfPlayAgainstComputer()
     {
         Console.WriteLine("Do you want to play against the computer? (yes/any other key for human opponent):");
         string? input = Console.ReadLine().Trim().ToLower();
@@ -42,7 +42,7 @@ public static class OtheloGame
         return input == "yes";
     }
 
-    private static void startGame()
+    private void startGame()
     {
         while (!m_IsQuit && !isGameOver())
         {
@@ -51,6 +51,7 @@ public static class OtheloGame
             if (m_IsPlayingAgainstComputer && m_CurrentPlayer == m_Computer)
             {
                 m_Computer.MoveRandomly(m_Board);
+                switchPlayers();
                 continue;
             }
 
@@ -62,22 +63,20 @@ public static class OtheloGame
                 break;
             }
 
-            Coordinate coordinate;
-
-            if (!handleMoveInput(step, out coordinate))
+            if (!handleMoveInput(step, out Coordinate coordinate))
             {
                 m_IsQuit = true;
                 break;
             }
 
-            m_Board.SetCell(m_CurrentPlayer.Color, coordinate);
+            m_Board.TrySetCell(m_CurrentPlayer.Color, coordinate);
             switchPlayers();
         }
         
         handleGameEnd();
     }
 
-    private static void displayBoardAndPrompt()
+    private void displayBoardAndPrompt()
     {
         m_Board.PrintBoard();
         Console.WriteLine(m_PlayerHasNoMovesNotification);
@@ -89,7 +88,7 @@ public static class OtheloGame
         return i_Step?.Trim().ToUpper() == "Q";
     }
 
-    private static bool handleMoveInput(string? i_Step, out Coordinate o_Coordinate)
+    private bool handleMoveInput(string? i_Step, out Coordinate o_Coordinate)
     {
         while (!isValidMove(i_Step, out o_Coordinate))
         {
@@ -105,7 +104,7 @@ public static class OtheloGame
         return true;
     }
 
-    private static void handleGameEnd()
+    private void handleGameEnd()
     {
         m_Board.PrintBoard();
 
@@ -113,30 +112,42 @@ public static class OtheloGame
         {
             m_Board.CalculateScores(m_Player1, m_Computer);
             Console.WriteLine($"Game Over! Final Scores: {m_Player1.Name} (X): {m_Player1.Score}, Computer (O): {m_Computer.Score}");
-            Console.WriteLine($"{(m_Player1.Score > m_Computer.Score ? m_Player1.Name : "Computer")} wins!");
+            printResults(m_Player1, m_Computer);
         }
         else
         {
             m_Board.CalculateScores(m_Player1, m_Player2);
             Console.WriteLine($"Game Over! Final Scores: {m_Player1.Name} (X): {m_Player1.Score}, {m_Player2.Name} (O): {m_Player2.Score}");
-            Console.WriteLine($"{(m_Player1.Score > m_Player2.Score ? m_Player1.Name : m_Player2.Name)} wins!");
+            printResults(m_Player1, m_Player2);
         }
 
-        Console.WriteLine("Do you want to play again? (yes/any other key to quit):");
+        Console.WriteLine("Do you want to quit? (Q/any other key to new game):");
         
-        if (Console.ReadLine().Trim().ToLower() == "yes")
+        if (Console.ReadLine().Trim().ToLower() == "q")
+        {
+            printGoodbye();
+        }
+        else
         {
             m_IsPlayingAgainstComputer = false;
             Console.Clear();
             Run();
         }
+    }
+
+    private void printResults(Player i_Player1, Player i_Player2)
+    {
+        if (i_Player1.Score == i_Player2.Score)
+        {
+            Console.WriteLine("You both are WINNERS");
+        }
         else
         {
-            printGoodbye();
+            Console.WriteLine($"{(i_Player1.Score > i_Player2.Score ? i_Player1.Name : i_Player2.Name)} wins!");
         }
     }
 
-    private static void printGoodbye()
+    private void printGoodbye()
     {
         Console.Clear();
         Console.WriteLine("Thanks for playing!");
@@ -144,20 +155,20 @@ public static class OtheloGame
         Console.WriteLine("Take care!");
     }
 
-    private static bool isValidMove(string? i_Step, out Coordinate o_Coordinate)
+    private bool isValidMove(string? i_Step, out Coordinate o_Coordinate)
     {
         return isStepValid(i_Step, out o_Coordinate) &&
                isValidCell(o_Coordinate, m_CurrentPlayer);
     }
     
-    private static bool isValidCell(Coordinate i_Coordinate, Player i_Player)
+    private bool isValidCell(Coordinate i_Coordinate, Player i_Player)
     {
         return BoardValidator.CellIsValid(i_Coordinate, i_Player.Color, 
             BoardValidator.IdentifyAllEdges(i_Coordinate, i_Player.Color, m_Board), 
             m_Board);
     }
     
-    private static bool isStepValid(string? i_Step, out Coordinate o_Coordinate)
+    private bool isStepValid(string? i_Step, out Coordinate o_Coordinate)
     {
         o_Coordinate = new Coordinate();
 
@@ -182,13 +193,13 @@ public static class OtheloGame
         return false;
     }
     
-    private static bool isGameOver()
+    private bool isGameOver()
     {
         return !hasValidMoves(m_Player1) &&
                !hasValidMoves(m_IsPlayingAgainstComputer ? m_Computer : m_Player2);
     }
     
-    private static bool hasValidMoves(Player i_Player)
+    private bool hasValidMoves(Player i_Player)
     {
         for (int i = 0; i < m_Board.Width; i++)
         {
@@ -204,7 +215,7 @@ public static class OtheloGame
         return false;
     }
 
-    private static void switchPlayers()
+    private void switchPlayers()
     {
         if (m_CurrentPlayer == m_Player1 && hasValidMoves(m_IsPlayingAgainstComputer ? m_Computer : m_Player2))
         {
@@ -222,7 +233,7 @@ public static class OtheloGame
         }
     }
 
-    private static int getBoardSize()
+    private int getBoardSize()
     {
         Console.WriteLine("Enter board Size: ");
         string? boardSize = Console.ReadLine();
@@ -230,21 +241,21 @@ public static class OtheloGame
         
         while (!isValidBoardSize(boardSize, out validBoardSize))
         {
-            Console.WriteLine("Invalid input, size must be a positive integer (at least 3): ");
+            Console.WriteLine("Invalid input, square size must be 6 or 8: ");
             boardSize = Console.ReadLine();
         }
 
         return validBoardSize;
     }
 
-    private static bool isValidBoardSize(string? i_BoardSize, out int o_BoardSize)
+    private bool isValidBoardSize(string? i_BoardSize, out int o_BoardSize)
     {
-        bool isValid = int.TryParse(i_BoardSize, out o_BoardSize) && o_BoardSize >= 3;
+        bool isValid = int.TryParse(i_BoardSize, out o_BoardSize) && (o_BoardSize == 6 || o_BoardSize == 8);
         
         return isValid;
     }
     
-    private static Player getPlayer(string i_Message, eColor i_Color)
+    private Player getPlayer(string i_Message, eColor i_Color)
     {
         Console.WriteLine(i_Message);
         string? playerName = Console.ReadLine();
@@ -258,7 +269,7 @@ public static class OtheloGame
         return new Player(playerName, 0, i_Color);
     }
 
-    private static bool isNameValid(string? i_PlayerName)
+    private bool isNameValid(string? i_PlayerName)
     {
         return !string.IsNullOrWhiteSpace(i_PlayerName) 
                && i_PlayerName.Length >= 3 
