@@ -1,18 +1,23 @@
 namespace Ex02_Othelo;
 
-public static class OtheloGame
+public class OtheloGame
 {
-    private static Player m_Player1;
-    private static Player m_Player2;
-    private static Computer m_Computer;
-    private static Player m_CurrentPlayer;
-    private static Board m_Board;
-    private static BoardValidator m_BoardValidator;
-    private static string m_PlayerHasNoMovesNotification = "";
-    private static bool m_IsQuit = false;
-    private static bool m_IsPlayingAgainstComputer = false;
+    private Player m_Player1;
+    private Player m_Player2;
+    private Computer m_Computer;
+    private Player m_CurrentPlayer;
+    private Board m_Board;
+    private BoardValidator m_BoardValidator;
+    private string m_PlayerHasNoMovesNotification = "";
+    private bool m_IsQuit = false;
+    private bool m_IsPlayingAgainstComputer = false;
+
+    public OtheloGame()
+    {
+        
+    }
     
-    public static void Run()
+    public void Run()
     {
         Console.WriteLine("Welcome to Othelo Game!");
         m_Player1 = getPlayer("Enter your name: ", eColor.Black);
@@ -34,7 +39,7 @@ public static class OtheloGame
         startGame();
     }
 
-    private static bool askIfPlayAgainstComputer()
+    private bool askIfPlayAgainstComputer()
     {
         Console.WriteLine("Do you want to play against the computer? (yes/any other key for human opponent):");
         string? input = Console.ReadLine().Trim().ToLower();
@@ -42,7 +47,7 @@ public static class OtheloGame
         return input == "yes";
     }
 
-    private static void startGame()
+    private void startGame()
     {
         while (!m_IsQuit && !isGameOver())
         {
@@ -78,7 +83,7 @@ public static class OtheloGame
         handleGameEnd();
     }
 
-    private static void displayBoardAndPrompt()
+    private void displayBoardAndPrompt()
     {
         m_Board.PrintBoard();
         Console.WriteLine(m_PlayerHasNoMovesNotification);
@@ -90,7 +95,7 @@ public static class OtheloGame
         return i_Step?.Trim().ToUpper() == "Q";
     }
 
-    private static bool handleMoveInput(string? i_Step, out Coordinate o_Coordinate)
+    private bool handleMoveInput(string? i_Step, out Coordinate o_Coordinate)
     {
         while (!isValidMove(i_Step, out o_Coordinate))
         {
@@ -106,7 +111,7 @@ public static class OtheloGame
         return true;
     }
 
-    private static void handleGameEnd()
+    private void handleGameEnd()
     {
         m_Board.PrintBoard();
 
@@ -137,7 +142,7 @@ public static class OtheloGame
         }
     }
 
-    private static void printGoodbye()
+    private void printGoodbye()
     {
         Console.Clear();
         Console.WriteLine("Thanks for playing!");
@@ -145,20 +150,20 @@ public static class OtheloGame
         Console.WriteLine("Take care!");
     }
 
-    private static bool isValidMove(string? i_Step, out Coordinate o_Coordinate)
+    private bool isValidMove(string? i_Step, out Coordinate o_Coordinate)
     {
         return isStepValid(i_Step, out o_Coordinate) &&
                isValidCell(o_Coordinate, m_CurrentPlayer);
     }
     
-    private static bool isValidCell(Coordinate i_Coordinate, Player i_Player)
+    private bool isValidCell(Coordinate i_Coordinate, Player i_Player)
     {
         return BoardValidator.CellIsValid(i_Coordinate, i_Player.Color, 
             BoardValidator.IdentifyAllEdges(i_Coordinate, i_Player.Color, m_Board), 
             m_Board);
     }
     
-    private static bool isStepValid(string? i_Step, out Coordinate o_Coordinate)
+    private bool isStepValid(string? i_Step, out Coordinate o_Coordinate)
     {
         o_Coordinate = new Coordinate();
 
@@ -183,13 +188,13 @@ public static class OtheloGame
         return false;
     }
     
-    private static bool isGameOver()
+    private bool isGameOver()
     {
         return !hasValidMoves(m_Player1) &&
                !hasValidMoves(m_IsPlayingAgainstComputer ? m_Computer : m_Player2);
     }
     
-    private static bool hasValidMoves(Player i_Player)
+    private bool hasValidMoves(Player i_Player)
     {
         for (int i = 0; i < m_Board.Width; i++)
         {
@@ -205,7 +210,7 @@ public static class OtheloGame
         return false;
     }
 
-    private static void switchPlayers()
+    private void switchPlayers()
     {
         if (m_CurrentPlayer == m_Player1 && hasValidMoves(m_IsPlayingAgainstComputer ? m_Computer : m_Player2))
         {
@@ -223,7 +228,7 @@ public static class OtheloGame
         }
     }
 
-    private static int getBoardSize()
+    private int getBoardSize()
     {
         Console.WriteLine("Enter board Size: ");
         string? boardSize = Console.ReadLine();
@@ -238,14 +243,14 @@ public static class OtheloGame
         return validBoardSize;
     }
 
-    private static bool isValidBoardSize(string? i_BoardSize, out int o_BoardSize)
+    private bool isValidBoardSize(string? i_BoardSize, out int o_BoardSize)
     {
         bool isValid = int.TryParse(i_BoardSize, out o_BoardSize) && (o_BoardSize == 6 || o_BoardSize == 8);
         
         return isValid;
     }
     
-    private static Player getPlayer(string i_Message, eColor i_Color)
+    private Player getPlayer(string i_Message, eColor i_Color)
     {
         Console.WriteLine(i_Message);
         string? playerName = Console.ReadLine();
@@ -259,7 +264,7 @@ public static class OtheloGame
         return new Player(playerName, 0, i_Color);
     }
 
-    private static bool isNameValid(string? i_PlayerName)
+    private bool isNameValid(string? i_PlayerName)
     {
         return !string.IsNullOrWhiteSpace(i_PlayerName) 
                && i_PlayerName.Length >= 3 
