@@ -133,6 +133,18 @@ public static class OtheloGame
             Console.Clear();
             Run();
         }
+        else
+        {
+            printGoodbye();
+        }
+    }
+
+    private static void printGoodbye()
+    {
+        Console.Clear();
+        Console.WriteLine("Thanks for playing!");
+        Console.WriteLine("We'll be here when you're ready for another round.");
+        Console.WriteLine("Take care!");
     }
 
     private static bool isValidMove(string? i_Step, out Coordinate o_Coordinate)
