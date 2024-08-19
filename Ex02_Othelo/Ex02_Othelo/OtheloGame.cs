@@ -230,7 +230,7 @@ public static class OtheloGame
         
         while (!isValidBoardSize(boardSize, out validBoardSize))
         {
-            Console.WriteLine("Invalid input, size must be a positive integer (at least 3): ");
+            Console.WriteLine("Invalid input, square size must be 6 or 8: ");
             boardSize = Console.ReadLine();
         }
 
@@ -239,7 +239,7 @@ public static class OtheloGame
 
     private static bool isValidBoardSize(string? i_BoardSize, out int o_BoardSize)
     {
-        bool isValid = int.TryParse(i_BoardSize, out o_BoardSize) && o_BoardSize >= 3;
+        bool isValid = int.TryParse(i_BoardSize, out o_BoardSize) && (o_BoardSize == 6 || o_BoardSize == 8);
         
         return isValid;
     }
