@@ -68,7 +68,7 @@ public class Board
     
     private void convertCellsBetweenEdges(eColor i_Color, Coordinate i_Coordinate, Coordinate?[] i_EdgesInSameColor)
     {
-        int[,] directions = Constants.directions;
+        int[,] directions = Constants.sr_Directions;
         
         for (int i = 0; i < 8; i++)
         {

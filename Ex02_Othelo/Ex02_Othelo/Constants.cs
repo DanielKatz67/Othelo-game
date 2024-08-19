@@ -2,7 +2,7 @@ namespace Ex02_Othelo;
 
 public static class Constants
 {
-    public static int[,] directions = new int[,]
+    public static readonly int[,] sr_Directions = new int[,]
     {
         {-1,  0}, // Left
         { 1,  0}, // Right

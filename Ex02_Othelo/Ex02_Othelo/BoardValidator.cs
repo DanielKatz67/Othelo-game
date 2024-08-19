@@ -40,7 +40,7 @@ public class BoardValidator
     public static Coordinate?[] IdentifyAllEdges(Coordinate i_Coordinate, eColor i_Color, Board i_Board)
     {
         Coordinate?[] validEdgesInAllDirections = new Coordinate?[8];
-        int[,] directions = Constants.directions;
+        int[,] directions = Constants.sr_Directions;
         eColor opponentColor = i_Color == eColor.Black ? eColor.White : eColor.Black;
         
         for (int i = 0; i < 8; i++)
