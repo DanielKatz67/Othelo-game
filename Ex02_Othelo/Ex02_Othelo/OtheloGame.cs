@@ -27,39 +27,61 @@ public static class OtheloGame
     {
         while (!m_IsQuit && !isGameOver())
         {
-            Console.Clear();
-            m_Board.PrintBoard();
-            Console.WriteLine(m_PlayerHasNoMovesNotification);
-            Console.WriteLine($"{m_CurrentPlayer.Name} ({(char)m_CurrentPlayer.Color}), Enter your move (e.g A1) or press 'Q' to quit:");
+            displayBoardAndPrompt();
             string? step = Console.ReadLine();
-            
-            if (step?.Trim().ToUpper() == "Q")
+
+            if (isQuitCommand(step))
             {
                 m_IsQuit = true;
                 break;
             }
 
             Coordinate coordinate;
-            
-            while (!isValidMove(step, out coordinate))
+
+            if (!handleMoveInput(step, out coordinate))
             {
-                Console.WriteLine("Invalid move. Please enter a valid move (e.g., A1) or press 'Q' to quit:");
-                step = Console.ReadLine();
-                
-                if (step?.Trim().ToUpper() == "Q")
-                {
-                    m_IsQuit = true;
-                    break;
-                }
+                m_IsQuit = true;
+                break;
             }
 
-            if (!m_IsQuit)
+            m_Board.SetCell(m_CurrentPlayer.Color, coordinate);
+            switchPlayers();
+        }
+
+        handleGameEnd();
+    }
+
+    private static void displayBoardAndPrompt()
+    {
+        Console.Clear();
+        m_Board.PrintBoard();
+        Console.WriteLine(m_PlayerHasNoMovesNotification);
+        Console.WriteLine($"{m_CurrentPlayer.Name} ({(char)m_CurrentPlayer.Color}), Enter your move (e.g A1) or press 'Q' to quit:");
+    }
+
+    private static bool isQuitCommand(string? step)
+    {
+        return step?.Trim().ToUpper() == "Q";
+    }
+
+    private static bool handleMoveInput(string? step, out Coordinate coordinate)
+    {
+        while (!isValidMove(step, out coordinate))
+        {
+            Console.WriteLine("Invalid move. Please enter a valid move (e.g., A1) or press 'Q' to quit:");
+            step = Console.ReadLine();
+
+            if (isQuitCommand(step))
             {
-                m_Board.SetCell(m_CurrentPlayer.Color, coordinate);
-                switchPlayers();
+                return false;
             }
         }
-        
+
+        return true;
+    }
+
+    private static void handleGameEnd()
+    {
         if (m_IsQuit)
         {
             Console.WriteLine("Game has been ended by the user.");
