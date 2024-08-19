@@ -129,6 +129,8 @@ public static class OtheloGame
         
         if (Console.ReadLine().Trim().ToLower() == "yes")
         {
+            m_IsPlayingAgainstComputer = false;
+            Console.Clear();
             Run();
         }
     }
