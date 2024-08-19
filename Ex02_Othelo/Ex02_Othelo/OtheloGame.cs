@@ -36,7 +36,7 @@ public static class OtheloGame
 
     private static bool askIfPlayAgainstComputer()
     {
-        Console.WriteLine("Do you want to play against the computer? (yes/no):");
+        Console.WriteLine("Do you want to play against the computer? (yes/any other key for human opponent):");
         string? input = Console.ReadLine().Trim().ToLower();
 
         return input == "yes";
@@ -125,7 +125,7 @@ public static class OtheloGame
             Console.WriteLine($"{(m_Player1.Score > m_Player2.Score ? m_Player1.Name : m_Player2.Name)} wins!");
         }
 
-        Console.WriteLine("Do you want to play again? (yes/no):");
+        Console.WriteLine("Do you want to play again? (yes/any other key to quit):");
         
         if (Console.ReadLine().Trim().ToLower() == "yes")
         {
