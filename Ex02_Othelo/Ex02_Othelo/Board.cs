@@ -31,9 +31,9 @@ public class Board
         }
     }
     
-    public char Cell(Coordinate i_Coordinate)
+    public char Cell(Coordinate i_CellCoordinate)
     {
-        return m_Grid[i_Coordinate.X, i_Coordinate.Y];
+        return m_Grid[i_CellCoordinate.X, i_CellCoordinate.Y];
     }
     
     private void initializeBoard()
@@ -47,20 +47,20 @@ public class Board
         setCellForInit(eColor.Black, new Coordinate(middleWidthIndex - 1, middleHeightIndex));
     }
 
-    private void setCellForInit(eColor i_Color, Coordinate i_CoordinateToSet)
+    private void setCellForInit(eColor i_ColorToSet, Coordinate i_CellCoordinateToSet)
     {
-        m_Grid[i_CoordinateToSet.X, i_CoordinateToSet.Y] = (char)i_Color;
+        m_Grid[i_CellCoordinateToSet.X, i_CellCoordinateToSet.Y] = (char)i_ColorToSet;
     }
     
-    public bool TrySetCell(eColor i_ColorToSet, Coordinate i_CoordinateToSet)
+    public bool TrySetCell(eColor i_ColorToSet, Coordinate i_CellCoordinateToSet)
     {
-        Coordinate?[] edgesInSameColor = BoardValidator.IdentifyAllEdges(i_CoordinateToSet, i_ColorToSet, this);
+        Coordinate?[] edgesInSameColor = BoardValidator.IdentifyAllEdges(i_CellCoordinateToSet, i_ColorToSet, this);
         bool isSetSucceeded;
         
-        if (BoardValidator.CellIsValid(i_CoordinateToSet, i_ColorToSet, edgesInSameColor, this))
+        if (BoardValidator.CellIsValid(i_CellCoordinateToSet, i_ColorToSet, edgesInSameColor, this))
         {
-            m_Grid[i_CoordinateToSet.X, i_CoordinateToSet.Y] = (char)i_ColorToSet;
-            convertCellsBetweenEdges(i_ColorToSet, i_CoordinateToSet, edgesInSameColor);
+            m_Grid[i_CellCoordinateToSet.X, i_CellCoordinateToSet.Y] = (char)i_ColorToSet;
+            convertCellsBetweenEdges(i_ColorToSet, i_CellCoordinateToSet, edgesInSameColor);
             isSetSucceeded = true;
         }
         else
