@@ -257,9 +257,9 @@ public class OtheloGame
         return parsedBoardSize;
     }
 
-    private bool isValidBoardSize(string? i_inputBoardSize, out int o_parsedBoardSize)
+    private bool isValidBoardSize(string? i_InputBoardSize, out int o_ParsedBoardSize)
     {
-        bool isValid = int.TryParse(i_inputBoardSize, out o_parsedBoardSize) && (o_parsedBoardSize == 6 || o_parsedBoardSize == 8);
+        bool isValid = int.TryParse(i_InputBoardSize, out o_ParsedBoardSize) && (o_ParsedBoardSize == 6 || o_ParsedBoardSize == 8);
         
         return isValid;
     }
