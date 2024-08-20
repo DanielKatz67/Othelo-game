@@ -22,11 +22,11 @@ public class Computer : Player
     {
         List<Coordinate> validMoves = new List<Coordinate>();
 
-        for (int x = 0; x < i_Board.Width; x++)
+        for (int columnIndex = 0; columnIndex < i_Board.Width; columnIndex++)
         {
-            for (int y = 0; y < i_Board.Height; y++)
+            for (int rowIndex = 0; rowIndex < i_Board.Height; rowIndex++)
             {
-                Coordinate potentialMove = new Coordinate(x, y);
+                Coordinate potentialMove = new Coordinate(columnIndex, rowIndex);
                 
                 if (BoardValidator.CellIsValid(potentialMove, Color, BoardValidator.IdentifyAllEdges(potentialMove, Color, i_Board), i_Board))
                 {

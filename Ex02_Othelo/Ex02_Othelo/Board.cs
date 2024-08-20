@@ -3,15 +3,15 @@ namespace Ex02_Othelo;
 
 public class Board
 {
-    private readonly int r_Width;
-    private readonly int r_Height;
+    private readonly int r_BoardWidth;
+    private readonly int r_BoardHeight;
     private char[,] m_Grid;
 
-    public Board(int i_Width, int i_Height)
+    public Board(int iBoardWidth, int iBoardHeight)
     {
-        r_Width = i_Width;
-        r_Height = i_Height;
-        m_Grid = new char[r_Width, r_Height];
+        r_BoardWidth = iBoardWidth;
+        r_BoardHeight = iBoardHeight;
+        m_Grid = new char[r_BoardWidth, r_BoardHeight];
         initializeBoard();
     }
     
@@ -19,7 +19,7 @@ public class Board
     {
         get
         {
-            return r_Width;
+            return r_BoardWidth;
         }
     }
     
@@ -27,19 +27,19 @@ public class Board
     {
         get
         {
-            return r_Height;
+            return r_BoardHeight;
         }
     }
     
-    public char Cell(Coordinate i_Coordinate)
+    public char Cell(Coordinate i_CellCoordinate)
     {
-        return m_Grid[i_Coordinate.X, i_Coordinate.Y];
+        return m_Grid[i_CellCoordinate.X, i_CellCoordinate.Y];
     }
     
     private void initializeBoard()
     {
-        int middleWidthIndex = (int)Math.Floor((decimal)(r_Width / 2));
-        int middleHeightIndex = (int)Math.Floor((decimal)(r_Height / 2));
+        int middleWidthIndex = (int)Math.Floor((decimal)(r_BoardWidth / 2));
+        int middleHeightIndex = (int)Math.Floor((decimal)(r_BoardHeight / 2));
         
         setCellForInit(eColor.White, new Coordinate(middleWidthIndex - 1, middleHeightIndex - 1));
         setCellForInit(eColor.White, new Coordinate(middleWidthIndex, middleHeightIndex));
@@ -47,43 +47,48 @@ public class Board
         setCellForInit(eColor.Black, new Coordinate(middleWidthIndex - 1, middleHeightIndex));
     }
 
-    private void setCellForInit(eColor i_Color, Coordinate i_Coordinate)
+    private void setCellForInit(eColor i_ColorToSet, Coordinate i_CellCoordinateToSet)
     {
-        m_Grid[i_Coordinate.X, i_Coordinate.Y] = (char)i_Color;
+        m_Grid[i_CellCoordinateToSet.X, i_CellCoordinateToSet.Y] = (char)i_ColorToSet;
     }
     
-    public bool TrySetCell(eColor i_Color, Coordinate i_Coordinate)
+    public bool TrySetCell(eColor i_ColorToSet, Coordinate i_CellCoordinateToSet)
     {
-        Coordinate?[] edgesInSameColor = BoardValidator.IdentifyAllEdges(i_Coordinate, i_Color, this);
+        Coordinate?[] edgesInSameColor = BoardValidator.IdentifyAllEdges(i_CellCoordinateToSet, i_ColorToSet, this);
+        bool isSetSucceeded;
         
-        if (BoardValidator.CellIsValid(i_Coordinate, i_Color, edgesInSameColor, this))
+        if (BoardValidator.CellIsValid(i_CellCoordinateToSet, i_ColorToSet, edgesInSameColor, this))
         {
-            m_Grid[i_Coordinate.X, i_Coordinate.Y] = (char)i_Color;
-            convertCellsBetweenEdges(i_Color, i_Coordinate, edgesInSameColor);
-            return true;
+            m_Grid[i_CellCoordinateToSet.X, i_CellCoordinateToSet.Y] = (char)i_ColorToSet;
+            convertCellsBetweenEdges(i_ColorToSet, i_CellCoordinateToSet, edgesInSameColor);
+            isSetSucceeded = true;
         }
-
-        return false;
+        else
+        { 
+            isSetSucceeded = false; 
+        }
+        
+        return isSetSucceeded;
     }
     
-    private void convertCellsBetweenEdges(eColor i_Color, Coordinate i_Coordinate, Coordinate?[] i_EdgesInSameColor)
+    private void convertCellsBetweenEdges(eColor i_ColorToConvert, Coordinate i_OriginChangedCoordinate, Coordinate?[] i_EdgesInSameColor)
     {
-        int[,] directions = Constants.sr_Directions;
+        int[,] directionVectors = Constants.sr_Directions;
         
-        for (int i = 0; i < 8; i++)
+        for (int directionIndex = 0; directionIndex < 8; directionIndex++)
         {
-            if (i_EdgesInSameColor[i].HasValue)
+            if (i_EdgesInSameColor[directionIndex].HasValue)
             {
-                int dx = directions[i, 0];
-                int dy = directions[i, 1];
-                int x = i_Coordinate.X + dx;
-                int y = i_Coordinate.Y + dy;
+                int deltaX = directionVectors[directionIndex, 0];
+                int deltaY = directionVectors[directionIndex, 1];
+                int currentX = i_OriginChangedCoordinate.X + deltaX;
+                int currentY = i_OriginChangedCoordinate.Y + deltaY;
                 
-                while (x != i_EdgesInSameColor[i].Value.X || y != i_EdgesInSameColor[i].Value.Y)
+                while (currentX != i_EdgesInSameColor[directionIndex].Value.X || currentY != i_EdgesInSameColor[directionIndex].Value.Y)
                 {
-                    m_Grid[x, y] = (char)i_Color;
-                    x += dx;
-                    y += dy;
+                    m_Grid[currentX, currentY] = (char)i_ColorToConvert;
+                    currentX += deltaX;
+                    currentY += deltaY;
                 }
             }
         }
@@ -97,10 +102,10 @@ public class Board
         Console.Clear();
         printColumnHeaders();
         
-        for (int x = 0; x < r_Width; x++)
+        for (int rowIndex = 0; rowIndex < r_BoardHeight; rowIndex++)
         {
             printSeparatorLine();
-            printRow(x);
+            printRow(rowIndex);
         }
 
         printSeparatorLine();
@@ -110,9 +115,9 @@ public class Board
     {
         Console.Write("  ");
         
-        for (char column = 'A'; column < 'A' + r_Width; column++)
+        for (char columnHeader = 'A'; columnHeader < 'A' + r_BoardWidth; columnHeader++)
         {
-            Console.Write("  " + column + " ");
+            Console.Write("  " + columnHeader + " ");
         }
         
         Console.WriteLine();
@@ -122,7 +127,7 @@ public class Board
     {
         Console.Write("  ");
         
-        for (int x = 0; x < r_Width; x++)
+        for (int columnIndex = 0; columnIndex < r_BoardWidth; columnIndex++)
         {
             Console.Write("====");
         }
@@ -130,15 +135,15 @@ public class Board
         Console.WriteLine("=");
     }
     
-    private void printRow(int i_X)
+    private void printRow(int i_RowIndex)
     {
-        Console.Write((i_X + 1) + " ");
-        char signToRight;
+        Console.Write((i_RowIndex + 1) + " ");
+        char cellContent;
         
-        for (int y = 0; y < r_Height; y++)
+        for (int columnIndex = 0; columnIndex < r_BoardWidth; columnIndex++)
         {
-            signToRight = m_Grid[i_X, y] == '\0' ? ' ' : m_Grid[i_X, y];
-            Console.Write("| " + signToRight + " ");
+            cellContent = m_Grid[i_RowIndex, columnIndex] == '\0' ? ' ' : m_Grid[i_RowIndex, columnIndex];
+            Console.Write("| " + cellContent + " ");
         }
             
         Console.WriteLine("|");
@@ -149,15 +154,15 @@ public class Board
         int blackScore = 0;
         int whiteScore = 0;
 
-        for (int x = 0; x < r_Width; x++)
+        for (int columnIndex = 0; columnIndex < r_BoardWidth; columnIndex++)
         {
-            for (int y = 0; y < r_Height; y++)
+            for (int rowIndex = 0; rowIndex < r_BoardHeight; rowIndex++)
             {
-                if (m_Grid[x, y] == (char)eColor.Black)
+                if (m_Grid[columnIndex, rowIndex] == (char)eColor.Black)
                 {
                     blackScore++;
                 }
-                else if (m_Grid[x, y] == (char)eColor.White)
+                else if (m_Grid[columnIndex, rowIndex] == (char)eColor.White)
                 {
                     whiteScore++;
                 }
