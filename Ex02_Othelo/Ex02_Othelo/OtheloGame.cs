@@ -281,7 +281,7 @@ public class OtheloGame
     private bool isNameValid(string? i_PlayerName)
     {
         return !string.IsNullOrWhiteSpace(i_PlayerName) 
-               && i_PlayerName.Length >= 3 
+               && i_PlayerName.Length >= 1 
                && i_PlayerName.All(char.IsLetter);
     }
 }
