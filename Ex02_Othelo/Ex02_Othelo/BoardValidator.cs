@@ -3,67 +3,63 @@ namespace Ex02_Othelo;
 
 public class BoardValidator
 {
-    public static bool CellIsValid(Coordinate i_Coordinate, eColor i_Color, Coordinate?[] i_EdgesInSameColor, Board i_Board)
+    public static bool CellIsValid(Coordinate i_CellCoordinate, eColor i_CoinColor, Coordinate?[] i_EdgesInSameColor, Board i_Board)
     {
-        if (!CellInGrid(i_Coordinate, i_Board))
-        {
-            return false;
-        }
+        bool isCellEmpty = i_Board.Cell(i_CellCoordinate) == '\0';
         
-        if (i_Board.Cell(i_Coordinate) != '\0')
-        {
-            return false;
-        }
-        
-        return isValidMove(i_Coordinate, i_Color, i_EdgesInSameColor);
+        return isCellEmpty && CellInGrid(i_CellCoordinate, i_Board) &&
+            isValidMove(i_CellCoordinate, i_CoinColor, i_EdgesInSameColor);
     }
     
-    public static bool CellInGrid(Coordinate i_Coordinate, Board i_Board)
+    public static bool CellInGrid(Coordinate i_CellCoordinate, Board i_Board)
     {
-        return (i_Coordinate.X > 0 || i_Coordinate.X <= i_Board.Width || 
-                i_Coordinate.Y > 0 || i_Coordinate.Y <= i_Board.Height);
+        return (i_CellCoordinate.X > 0 || i_CellCoordinate.X <= i_Board.Width || 
+                i_CellCoordinate.Y > 0 || i_CellCoordinate.Y <= i_Board.Height);
     }
     
-    private static bool isValidMove(Coordinate i_Coordinate, eColor i_Color, Coordinate?[] i_EdgesInSameColor)
+    private static bool isValidMove(Coordinate i_CellCoordinate, eColor i_CoinColor, Coordinate?[] i_EdgesInSameColor)
     {
+        bool isValidMove = false;
+        
         foreach (Coordinate? edge in i_EdgesInSameColor)
         {
             if (edge.HasValue)
             {
-                return true;
+                isValidMove = true;
+                break;
             }
         }
 
-        return false; 
+        return isValidMove; 
     }
     
-    public static Coordinate?[] IdentifyAllEdges(Coordinate i_Coordinate, eColor i_Color, Board i_Board)
+    public static Coordinate?[] IdentifyAllEdges(Coordinate i_CellCoordinate, eColor i_CoinColor, Board i_Board)
     {
         Coordinate?[] validEdgesInAllDirections = new Coordinate?[8];
-        int[,] directions = Constants.sr_Directions;
-        eColor opponentColor = i_Color == eColor.Black ? eColor.White : eColor.Black;
+        int[,] directionVectors = Constants.sr_Directions;
+        eColor opponentColor = i_CoinColor == eColor.Black ? eColor.White : eColor.Black;
         
-        for (int i = 0; i < 8; i++)
+        for (int directionIndex = 0; directionIndex < 8; directionIndex++)
         {
-            int directionX = directions[i, 0];
-            int directionY = directions[i, 1];
-            int x = i_Coordinate.X + directionX;
-            int y = i_Coordinate.Y + directionY;
+            int deltaX = directionVectors[directionIndex, 0];
+            int deltaY = directionVectors[directionIndex, 1];
+            int currentX = i_CellCoordinate.X + deltaX;
+            int currentY = i_CellCoordinate.Y + deltaY;
             bool hasOpponentCoinBetween = false;
             
-            while (x >= 0 && x < i_Board.Width && y >= 0 && y < i_Board.Height)
+            while (currentX >= 0 && currentX < i_Board.Width && currentY >= 0 && currentY < i_Board.Height)
             {
-                char currentCell =  i_Board.Cell(new Coordinate(x, y));
+                char currentCellColor =  i_Board.Cell(new Coordinate(currentX, currentY));
 
-                if (currentCell == (char)opponentColor)
+                if (currentCellColor == (char)opponentColor)
                 {
                     hasOpponentCoinBetween = true;
                 }
-                else if (currentCell == (char)i_Color)
+                else if (currentCellColor == (char)i_CoinColor)
                 {
                     if (hasOpponentCoinBetween)
                     {
-                        validEdgesInAllDirections[i] = new Coordinate(x, y);
+                        validEdgesInAllDirections[directionIndex] = new Coordinate(currentX, currentY);
                     }
                     
                     break;
@@ -73,8 +69,8 @@ public class BoardValidator
                     break;
                 }
 
-                x += directionX;
-                y += directionY;
+                currentX += deltaX;
+                currentY += deltaY;
             }
         }
 
