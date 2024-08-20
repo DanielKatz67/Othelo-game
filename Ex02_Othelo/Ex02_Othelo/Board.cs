@@ -102,7 +102,7 @@ public class Board
         Console.Clear();
         printColumnHeaders();
         
-        for (int rowIndex = 0; rowIndex < r_BoardWidth; rowIndex++)
+        for (int rowIndex = 0; rowIndex < r_BoardHeight; rowIndex++)
         {
             printSeparatorLine();
             printRow(rowIndex);
@@ -140,7 +140,7 @@ public class Board
         Console.Write((i_RowIndex + 1) + " ");
         char cellContent;
         
-        for (int columnIndex = 0; columnIndex < r_BoardHeight; columnIndex++)
+        for (int columnIndex = 0; columnIndex < r_BoardWidth; columnIndex++)
         {
             cellContent = m_Grid[i_RowIndex, columnIndex] == '\0' ? ' ' : m_Grid[i_RowIndex, columnIndex];
             Console.Write("| " + cellContent + " ");
