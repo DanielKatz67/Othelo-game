@@ -133,6 +133,7 @@ public class OtheloGame
         else
         {
             m_IsPlayingAgainstComputer = false;
+            m_IsQuit = false;
             Console.Clear();
             Run();
         }
