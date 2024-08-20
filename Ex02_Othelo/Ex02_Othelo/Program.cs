@@ -1,8 +1,8 @@
 ﻿using Ex02_Othelo;
 
-class Program
+public class Program
 {
-    public static void Main(String[] args)
+    public static void Main()
     {
         OtheloGame otheloGame = new OtheloGame();
         otheloGame.Run();
