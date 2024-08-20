@@ -55,15 +55,15 @@ public class OtheloGame
                 continue;
             }
 
-            string? step = Console.ReadLine();
+            string? currentPlayerMove = Console.ReadLine();
 
-            if (isQuitCommand(step))
+            if (isQuitCommand(currentPlayerMove))
             {
                 m_IsQuit = true;
                 break;
             }
 
-            if (!handleMoveInput(step, out Coordinate coordinate))
+            if (!isGameContinuedAfterMove(currentPlayerMove, out Coordinate coordinate))
             {
                 m_IsQuit = true;
                 break;
@@ -83,25 +83,28 @@ public class OtheloGame
         Console.WriteLine($"{m_CurrentPlayer.Name} ({(char)m_CurrentPlayer.Color}), Enter your move (e.g A1) or press 'Q' to quit:");
     }
 
-    private static bool isQuitCommand(string? i_Step)
+    private static bool isQuitCommand(string? i_InputMove)
     {
-        return i_Step?.Trim().ToUpper() == "Q";
+        return i_InputMove?.Trim().ToUpper() == "Q";
     }
 
-    private bool handleMoveInput(string? i_Step, out Coordinate o_Coordinate)
+    private bool isGameContinuedAfterMove(string? i_InputMove, out Coordinate o_CellCoordinate)
     {
-        while (!isValidMove(i_Step, out o_Coordinate))
+        bool isGameContinue = true;
+        
+        while (!isValidMove(i_InputMove, out o_CellCoordinate))
         {
             Console.WriteLine("Invalid move. Please enter a valid move (e.g., A1) or press 'Q' to quit:");
-            i_Step = Console.ReadLine();
+            i_InputMove = Console.ReadLine();
 
-            if (isQuitCommand(i_Step))
+            if (isQuitCommand(i_InputMove))
             {
-                return false;
+                isGameContinue = false;
+                break;
             }
         }
 
-        return true;
+        return isGameContinue;
     }
 
     private void handleGameEnd()
@@ -155,42 +158,45 @@ public class OtheloGame
         Console.WriteLine("Take care!");
     }
 
-    private bool isValidMove(string? i_Step, out Coordinate o_Coordinate)
+    private bool isValidMove(string? i_InputMove, out Coordinate o_CellCoordinate)
     {
-        return isStepValid(i_Step, out o_Coordinate) &&
-               isValidCell(o_Coordinate, m_CurrentPlayer);
+        return isStepValid(i_InputMove, out o_CellCoordinate) &&
+               isValidCell(o_CellCoordinate, m_CurrentPlayer);
     }
     
-    private bool isValidCell(Coordinate i_Coordinate, Player i_Player)
+    private bool isValidCell(Coordinate i_CellCoordinate, Player i_Player)
     {
-        return BoardValidator.CellIsValid(i_Coordinate, i_Player.Color, 
-            BoardValidator.IdentifyAllEdges(i_Coordinate, i_Player.Color, m_Board), 
+        return BoardValidator.CellIsValid(i_CellCoordinate, i_Player.Color, 
+            BoardValidator.IdentifyAllEdges(i_CellCoordinate, i_Player.Color, m_Board), 
             m_Board);
     }
     
-    private bool isStepValid(string? i_Step, out Coordinate o_Coordinate)
+    private bool isStepValid(string? i_InputMove, out Coordinate o_CellCoordinate)
     {
-        o_Coordinate = new Coordinate();
+        o_CellCoordinate = new Coordinate();
+        bool isStepValid = false;
 
-        if (string.IsNullOrWhiteSpace(i_Step) || i_Step.Length < 2)
+        if (string.IsNullOrWhiteSpace(i_InputMove) || i_InputMove.Length < 2)
         {
-            return false;
+            isStepValid = false;
         }
-
-        char columnChar = i_Step[0];
-        string rowPart = i_Step.Substring(1);
-        int column = columnChar - 'A';
-        bool isRowValid = int.TryParse(rowPart, out int row);
-        bool isColumnValid = column >= 0 && column < m_Board.Width;
-        isRowValid = isRowValid && row >= 1 && row <= m_Board.Height;
-
-        if (isColumnValid && isRowValid)
+        else
         {
-            o_Coordinate = new Coordinate(row - 1, column);
-            return true;
-        }
+            char columnChar = i_InputMove[0];
+            string rowPart = i_InputMove.Substring(1);
+            int column = columnChar - 'A';
+            bool isRowValid = int.TryParse(rowPart, out int row);
+            bool isColumnValid = column >= 0 && column < m_Board.Width;
+            isRowValid = isRowValid && row >= 1 && row <= m_Board.Height;
 
-        return false;
+            if (isColumnValid && isRowValid)
+            {
+                o_CellCoordinate = new Coordinate(row - 1, column);
+                isStepValid = true;
+            }
+        }
+        
+        return isStepValid;
     }
     
     private bool isGameOver()
@@ -201,18 +207,20 @@ public class OtheloGame
     
     private bool hasValidMoves(Player i_Player)
     {
-        for (int i = 0; i < m_Board.Width; i++)
+        bool hasValidMoves = false;
+        
+        for (int rowIndex = 0; rowIndex < m_Board.Height; rowIndex++)
         {
-            for (int j = 0; j < m_Board.Height; j++)
+            for (int columnIndex = 0; columnIndex < m_Board.Width; columnIndex++)
             {
-                if (isValidCell(new Coordinate(i, j), i_Player))
+                if (isValidCell(new Coordinate(columnIndex, rowIndex), i_Player))
                 {
-                    return true;
+                    hasValidMoves = true;
                 }
             }
         }
         
-        return false;
+        return hasValidMoves;
     }
 
     private void switchPlayers()
@@ -236,21 +244,21 @@ public class OtheloGame
     private int getBoardSize()
     {
         Console.WriteLine("Enter board Size: ");
-        string? boardSize = Console.ReadLine();
-        int validBoardSize;
+        string? inputBoardSize = Console.ReadLine();
+        int parsedBoardSize;
         
-        while (!isValidBoardSize(boardSize, out validBoardSize))
+        while (!isValidBoardSize(inputBoardSize, out parsedBoardSize))
         {
             Console.WriteLine("Invalid input, square size must be 6 or 8: ");
-            boardSize = Console.ReadLine();
+            inputBoardSize = Console.ReadLine();
         }
 
-        return validBoardSize;
+        return parsedBoardSize;
     }
 
-    private bool isValidBoardSize(string? i_BoardSize, out int o_BoardSize)
+    private bool isValidBoardSize(string? i_inputBoardSize, out int o_parsedBoardSize)
     {
-        bool isValid = int.TryParse(i_BoardSize, out o_BoardSize) && (o_BoardSize == 6 || o_BoardSize == 8);
+        bool isValid = int.TryParse(i_inputBoardSize, out o_parsedBoardSize) && (o_parsedBoardSize == 6 || o_parsedBoardSize == 8);
         
         return isValid;
     }
